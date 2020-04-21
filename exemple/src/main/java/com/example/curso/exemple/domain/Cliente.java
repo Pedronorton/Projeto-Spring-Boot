@@ -102,10 +102,11 @@ public class Cliente implements Serializable {
     public void setEnderecos(List<Endereco> enderecos) {
         this.enderecos = enderecos;
     }
-
+    //ARRUMAR O POST PEDIDO
+    /*
     public void setTipo(Integer tipo) {
         this.tipo = tipo;
-    }
+    }*/
 
     public List<Pedido> getPedidos() {
         return pedidos;

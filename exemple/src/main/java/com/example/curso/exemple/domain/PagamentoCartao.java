@@ -1,10 +1,12 @@
 package com.example.curso.exemple.domain;
 
 import com.example.curso.exemple.enums.EstadoPagamento;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import javax.persistence.Entity;
 
 @Entity
+//@JsonTypeName("PagamentoCartao")
 public class PagamentoCartao extends Pagamento {
 
     private static final long serialVersionUID = 1L;

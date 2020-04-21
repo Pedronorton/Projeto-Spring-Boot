@@ -41,6 +41,10 @@ public class ItemPedido implements Serializable {
         return id.getPedido();
     }
 
+    public void setPedido(Pedido pedido){
+        id.setPedido(pedido);
+    }
+
     public double getSubtotal(){
         return (preco - desconto)*quantidade;
     }
@@ -49,6 +53,9 @@ public class ItemPedido implements Serializable {
         return id.getProduto();
     }
 
+    public void setProduto(Produto produto){
+        id.setProduto(produto);
+    }
     public ItemPedidoPK getId() {
         return id;
     }
