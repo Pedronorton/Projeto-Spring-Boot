@@ -2,6 +2,8 @@ package com.example.curso.exemple.config;
 
 
 import com.example.curso.exemple.service.DBService;
+import com.example.curso.exemple.service.EmailService;
+import com.example.curso.exemple.service.SmtpEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +25,11 @@ public class DevConfig {
         dbService.instantiateDatabase();
 
         return true;
+    }
+
+    @Bean // isso funciona como se fosse um polimorfismo, quando instancio em pedido service ele pode ser tanto do teste(Mock) quanto envio real (SMTP)
+    public EmailService emailService(){
+        return new SmtpEmailService();
     }
 
 }
