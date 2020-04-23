@@ -2,6 +2,8 @@ package com.example.curso.exemple.config;
 
 
 import com.example.curso.exemple.service.DBService;
+import com.example.curso.exemple.service.EmailService;
+import com.example.curso.exemple.service.MockEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +25,11 @@ public class TestConfig {
         dbService.instantiateDatabase();
 
         return true;
+    }
+
+    @Bean
+    public EmailService emailService(){
+        return new MockEmailService();
     }
 
 }

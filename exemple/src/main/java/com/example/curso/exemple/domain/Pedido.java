@@ -5,10 +5,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.text.NumberFormat;
+import java.util.*;
 
 @Entity
 public class Pedido implements Serializable {
@@ -112,4 +110,31 @@ public class Pedido implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @Override
+    public String toString(){
+        StringBuilder builder = new StringBuilder();
+        NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt","BR"));
+        builder.append("Id Pedido: ");
+        builder.append(getId()+"\n");
+        builder.append("Cliente: ");
+        builder.append(getCliente().getNome()+"\n");
+        builder.append("Instante do pedido: ");
+        builder.append(getInstante()+"\n");
+        builder.append("Situação pagamento: ");
+        builder.append(getPagamento().getEstado()+"\n");
+        builder.append("Valor total: ");
+        builder.append(nf.format(getValorTotal())+"\n");
+        for(ItemPedido ip : itens){
+            builder.append(ip.getProduto().getNome());
+            builder.append(" | Qtd: ");
+            builder.append(ip.getQuantidade());
+            builder.append(" | Valor: ");
+            builder.append(ip.getProduto().getPreco());
+            builder.append(" | Subtotal: ");
+            builder.append(nf.format(ip.getSubtotal())+"\n");
+        }
+        return builder.toString();
+    }
+
 }
