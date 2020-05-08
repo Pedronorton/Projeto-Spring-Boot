@@ -8,11 +8,11 @@ const post = (data) => {
     return Api().post('/clientes', data)
 }
 
-const deletar = (id) => {
+const del = (id) => {
     return Api().delete(`/clientes/${id}`)
 }
 export default {
     getAll,
     post,
-    deletar
+    del
 }

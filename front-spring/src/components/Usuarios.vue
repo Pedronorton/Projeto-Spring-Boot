@@ -119,7 +119,7 @@ export default {
 
       this.$bvModal.hide('modal-delete') // proprio do componente
       try {
-        await Clientes.deletar(item.id)
+        await Clientes.del(item.id)
         
         
         const temp = {

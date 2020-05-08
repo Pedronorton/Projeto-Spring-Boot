@@ -5,6 +5,8 @@ import Usuarios from '../components/Usuarios'
 import Home from '../components/Home'
 import AddUser from '../components/AdicionarUsuario'
 import Produto from '../components/Produto'
+import AddCategoria from '../components/AdicionarCategoria'
+
 
 Vue.use(Router)
 
@@ -37,7 +39,11 @@ export default new Router({
       path: '/produtos',
       name: 'Produto',
       component: Produto 
-    },
-    
+    },   
+    {
+      path: '/add-categoria',
+      name: 'AdicionarCategoria',
+      component: AddCategoria 
+    }, 
   ]
 })

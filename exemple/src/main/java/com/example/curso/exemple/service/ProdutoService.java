@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,11 +31,17 @@ public class ProdutoService {
         return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado | id: "+ id + "tipo: "+Produto.class.getName()));
     }
 
-    public Page<Produto> search(String nome, List<Integer> ids, Integer pager, Integer linesPerPage, String orderBy, String direction){
+    public Produto insert(Produto obj){
+        obj = repo.save(obj);
+
+        return obj;
+    }
+    public Page<Produto> search(Integer pager, Integer linesPerPage, String orderBy, String direction){
+
         PageRequest pageRequest = PageRequest.of(pager, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
 
-        List<Categoria> categorias = categoriaRepository.findAllById(ids);
-        return repo.search(nome, categorias, pageRequest);
+        List<Categoria> categorias = categoriaRepository.findAll();
+        return repo.findAll(pageRequest);
     }
 
 }

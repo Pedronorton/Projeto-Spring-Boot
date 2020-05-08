@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -18,13 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @RestController
 @RequestMapping(value = "/categoria")
 public class CategoriaResource {
 
     @Autowired
     private CategoriaService service;
-    /*
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> find(@PathVariable Integer id){ // O PATHVARIABLE SIGNIFICA QUE O ENDPOINT QUE É O /ID IRÁ PARA A VARIAVEL INTEGER ID
         //ResponseEntity quer dizer que irá retornar uma resposta completa http
@@ -33,17 +35,12 @@ public class CategoriaResource {
 
 
         return ResponseEntity.ok().body(obj); //Retorna uma resposta http que foi um sucesso e seu corpo é o objeto obj qu busquei no banco
-    }*/
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<?> find(@PathVariable Integer id){
-        Categoria obj = service.buscar(id);
-
-        return ResponseEntity.ok().body(obj); //retorna um json caso for encontrado
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity listarTodos(){
         List<Categoria> obj = service.findAll();
+
         return ResponseEntity.ok().body(obj);
     }
 
@@ -81,4 +78,5 @@ public class CategoriaResource {
         Page<CategoriaDTO> listDTO = list.map(obj -> new CategoriaDTO(obj));
         return ResponseEntity.ok().body(listDTO);
     }
+
 }

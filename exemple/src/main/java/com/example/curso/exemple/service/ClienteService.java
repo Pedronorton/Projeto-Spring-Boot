@@ -95,14 +95,8 @@ public class ClienteService {
         Cidade cid = new Cidade(objDto.getCidade_id(), null,null);
 
         Endereco end = new Endereco(objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
-        System.out.println("Teste: "+end.getCidade().getId());
+
         cli.getEnderecos().add(end);
-
-        for(Endereco x : cli.getEnderecos()){
-            System.out.println("blabla");
-            System.out.println(x.getLogradouro());
-        }
-
 
         cli.getTelefones().add(objDto.getTelefone1());
         if(objDto.getTelefone2()!=null){
