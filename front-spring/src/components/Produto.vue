@@ -51,7 +51,7 @@
             </div>
           </li>
         </ul>
-        <FormAddCategoria />
+        <FormAddCategoria @emit-click="insertListner"/>
         <b-pagination
           v-model="currentPage"
           :total-rows="rows"
@@ -142,6 +142,27 @@ export default {
     }
   },
   methods: {
+    insertListner(item, flag){
+      
+      var temp
+      if(flag === 1){
+        temp = {
+          message: "Item inserido com sucesso ! ",
+          type: "primary"
+        };
+      }else if(flag === 2){
+        temp = {
+          message: "Erro ao inserir item: "+ item.message,
+          type: "danger"
+        };
+      }
+      this.alertBody = temp;
+      this.visible = 5;
+      setTimeout(function() {
+        this.visible = null;
+      }, 5000);
+
+    },
     showModal(item) {
       this.deleteItem = item;
       this.$bvModal.show("modal-delete1");

@@ -4,7 +4,6 @@
       <b-button v-b-modal.modal-1>Adicionar produto</b-button>
 
       <b-modal id="modal-1" title="Adicionar Produto" @ok="handleOk">
-
         <form>
           <div class="form-group">
             <label for="exampleInputEmail1">Nome</label>
@@ -15,7 +14,6 @@
               aria-describedby="emailHelp"
               placeholder="insira o nome"
             />
-
           </div>
           <div class="form-group">
             <label for="exampleInputPassword1">Valor</label>
@@ -28,38 +26,43 @@
             />
           </div>
         </form>
-
       </b-modal>
     </div>
   </div>
 </template>
 <script>
- import Produto from '../services/produto'
+import Produto from "../services/produto";
+
 export default {
   name: "FormAddCategoria",
-  components: {},
-  data(){
-      return {
-          produto:{
-            nome: "",
-            preco: ""
-          }
-          
-      }
+  components: {
+    
   },
-  methods:{
-      //post
-      async handleOk(){
+  data() {
+    return {
+      produto: {
+        nome: "",
+        preco: ""
+      },
+      alertBody: {
+        message: "",
+        type: ""
+      },
+      visible:null
+    };
+  },
+  methods: {
+    //post
+    async handleOk() {
+      try {
+        await Produto.post(this.produto);
+        this.$emit('emit-click',this.produto,1)
         
-        try{
-          await Produto.post(this.produto)
-          window.location.reload()
-        }
-        catch(e){
-          alert("Erro")
-        }
+      } catch (e) {
+        this.$emit('emit-click',e,2)
         
       }
+    }
   }
 };
 </script>
