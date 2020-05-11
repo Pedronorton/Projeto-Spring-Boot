@@ -6,8 +6,10 @@ import com.example.curso.exemple.domain.Produto;
 import com.example.curso.exemple.repositories.CategoriaRepository;
 import com.example.curso.exemple.repositories.PedidoRepository;
 import com.example.curso.exemple.repositories.ProdutoRepository;
+import com.example.curso.exemple.service.exception.DataIntegrityException;
 import com.example.curso.exemple.service.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -42,6 +44,16 @@ public class ProdutoService {
 
         List<Categoria> categorias = categoriaRepository.findAll();
         return repo.findAll(pageRequest);
+    }
+
+    public void delete(Integer id) {
+
+        try{
+            repo.deleteById(id);
+        }
+        catch (DataIntegrityViolationException e){
+            throw new DataIntegrityException("Não é possível excluir produto");
+        }
     }
 
 }
