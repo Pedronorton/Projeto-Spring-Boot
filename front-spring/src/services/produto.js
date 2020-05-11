@@ -13,10 +13,15 @@ const del = (id) => {
     return Api().delete(`/produtos/${id}`)
 }
 
+const put = (id,data) => {
+    return Api().put(`/produtos/${id}`, data)
+}
+
 
 export default {
     getPage,
     post,
     del,
+    put,
 
 }

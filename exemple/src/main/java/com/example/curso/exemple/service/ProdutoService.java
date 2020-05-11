@@ -56,4 +56,14 @@ public class ProdutoService {
         }
     }
 
+    public Produto update(Produto obj){
+        Produto newObj = buscar(obj.getId());
+        updateData(newObj, obj);
+        return repo.save(newObj);
+
+    }
+
+    public void updateData(Produto newObj, Produto obj){ // possível apenas mudar o preço
+        newObj.setPreco(obj.getPreco());
+    }
 }

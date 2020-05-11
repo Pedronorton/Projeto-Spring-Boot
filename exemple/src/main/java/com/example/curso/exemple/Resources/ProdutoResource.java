@@ -44,6 +44,14 @@ public class ProdutoResource {
         return ResponseEntity.noContent().build();
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody Produto obj){
+        
+        obj = service.update(obj);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Page<ProdutoDTO>> findAll(
             //@RequestParam(value = "nome", defaultValue = "") String nome,
