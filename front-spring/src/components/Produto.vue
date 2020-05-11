@@ -2,6 +2,9 @@
   <div>
     <Navbar class="navb" />
     <Alert :message="alertBody.message" :type="alertBody.type" :visible="visible" />
+    <b-modal id="modal-delete1" title="Tem certeza que deseja deletar" @ok="handleDelete()">
+      <p class="my-4"></p>
+    </b-modal>
     <div class="container-list">
       <h1>Lista de Produtos</h1>
       <div class="list-categoria">
@@ -13,6 +16,15 @@
           >
             {{index}}
             {{produto.nome}}
+            <div class="icons">
+              <b-icon
+                class="icon-delete"
+                icon="trash-fill"
+                aria-hidden="true"
+                @click="showModal(produto)"
+              ></b-icon>
+              <b-icon icon="pencil" aria-hidden="true" v-b-modal="'modal'"></b-icon>
+            </div>
           </li>
         </ul>
         <FormAddCategoria />
@@ -46,7 +58,10 @@ export default {
         message: "",
         type: ""
       },
-      visible: null
+      visible: null,
+      
+      itemDelete: null,
+
     };
   },
 
@@ -97,11 +112,48 @@ export default {
       }, 5000);
     }
   },
-  methods: {}
+  methods: {
+    showModal(item) {
+      this.itemDelete = item;
+      this.$bvModal.show("modal-delete1");
+    },
+    async handleDelete() {
+      try {
+        await Produto.del(this.itemDelete.id);
+        const index = this.tableData.indexOf(this.itemDelete)
+        this.tableData.splice(index,1)
+        const temp = {
+          message: "Item deletado com sucesso ! ",
+          type: "primary"
+        };
+        this.alertBody = temp;
+        this.visible = 5;
+        setTimeout(function() {
+          this.visible = null;
+        }, 5000);
+      } catch (e) {
+        const temp = {
+          message: "Erro ao deletar produto " + e.message,
+          type: "danger"
+        };
+        this.alertBody = temp;
+        this.visible = 5;
+        setTimeout(function() {
+          this.visible = null;
+        }, 5000);
+      }
+    }
+
+  }
 };
 </script>
 
 <style scoped>
+
+.icon-delete {
+  margin-right: 10px;
+}
+
 .navb {
   width: 100%;
   top: 0;

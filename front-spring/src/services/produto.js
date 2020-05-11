@@ -9,9 +9,14 @@ const post = (data) => {
     return Api().post('/produtos', data);
 }
 
+const del = (id) => {
+    return Api().delete(`/produtos/${id}`)
+}
+
 
 export default {
     getPage,
     post,
+    del,
 
 }
