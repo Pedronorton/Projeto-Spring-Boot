@@ -130,7 +130,7 @@ export default {
       }
     } catch (e) {
       const temp = {
-        message: "Erro ao buscar no banco",
+        message: "Erro ao buscar no banco: "+e.message,
         type: "danger"
       };
       this.alertBody = temp;
