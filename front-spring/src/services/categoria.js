@@ -12,8 +12,13 @@ const del = (id) => {
     return Api().delete(`/categoria/${id}`)
 }
 
+const put = (id, data) => {
+    return Api().put(`/categoia/${id}`,data)
+}
+
 export default {
     getAll,
     post,
-    del
+    del,
+    put
 }

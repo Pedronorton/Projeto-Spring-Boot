@@ -2,9 +2,24 @@
   <div>
     <Navbar class="navb" />
     <Alert :message="alertBody.message" :type="alertBody.type" :visible="visible" />
+
     <b-modal id="modal-delete1" title="Tem certeza que deseja deletar" @ok="handleDelete()">
       <p class="my-4"></p>
     </b-modal>
+
+    <b-modal id="modal-edit" title="Editar" @ok="handleEdit(editItem)">
+      <p class="my-4"></p>
+
+      <form ref="form" >
+        <b-form-group
+          label="Nome"
+        >
+          <b-form-input  v-model="editItem.nome" ></b-form-input>
+        </b-form-group>
+
+      </form>
+    </b-modal>
+
     <div class="container-list">
       <div class="container-title">
         <h1 class="title">Lista de categorias</h1>
@@ -25,7 +40,11 @@
                 aria-hidden="true"
                 @click="showModal(categoria)"
               ></b-icon>
-              <b-icon icon="pencil" aria-hidden="true" v-b-modal="'modal'"></b-icon>
+              <b-icon 
+              icon="pencil" 
+              aria-hidden="true" 
+              v-b-modal="'modal-edit'"
+              @click="handleSubmitEdit(categoria)" ></b-icon>
             </div>
           </li>
         </ul>
@@ -48,7 +67,11 @@ export default {
         message: "",
         type: ""
       },
-      itemDelete: null
+      itemDelete: null,
+
+      editItem:{
+        nome:""
+      }
     };
   },
 
@@ -118,6 +141,40 @@ export default {
       } catch (e) {
         const temp = {
           message: "Erro ao deletar categoria " + e.message,
+          type: "danger"
+        };
+        this.alertBody = temp;
+        this.visible = 5;
+        setTimeout(function() {
+          this.visible = null;
+        }, 5000);
+      }
+    },
+
+    handleSubmitEdit(item){
+      this.editItem = item
+    },
+
+    async handleEdit(item){
+
+      try{
+        console.log(item);
+        
+        await Categoria.put(item.id, item)
+        const temp = {
+          message: "Item atualizado com sucesso !",
+          type: "primary"
+        };
+        this.alertBody = temp;
+        this.visible = 5;
+        setTimeout(function() {
+          this.visible = null;
+        }, 5000);
+
+      }
+      catch(e){
+        const temp = {
+          message: "Erro ao atualizar item: "+e.message,
           type: "danger"
         };
         this.alertBody = temp;
