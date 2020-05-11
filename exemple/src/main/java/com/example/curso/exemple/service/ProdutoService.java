@@ -56,6 +56,12 @@ public class ProdutoService {
         }
     }
 
+    /**
+     * Funcção recebe um objeto do tipo Produto faz a atualização dos dados e salva no banco
+     * Obs: esse método apenas atualiza o produto e não valores do produto em pedidos ja feitos
+     * @param obj
+     * @return
+     */
     public Produto update(Produto obj){
         Produto newObj = buscar(obj.getId());
         updateData(newObj, obj);
