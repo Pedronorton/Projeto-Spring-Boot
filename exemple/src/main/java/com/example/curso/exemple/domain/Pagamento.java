@@ -3,6 +3,7 @@ package com.example.curso.exemple.domain;
 import com.example.curso.exemple.enums.EstadoPagamento;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import javax.persistence.*;
@@ -12,6 +13,12 @@ import java.util.Objects;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")// quando se tem classes filhas onde as filhas serão instanciadas, os dados que vem na requisição tem que ser desse tipo, irá
+@JsonSubTypes(
+        {
+                @JsonSubTypes.Type(name = "PagamentoBoleto", value = PagamentoBoleto.class),
+                @JsonSubTypes.Type(name = "PagamentoCartao", value = PagamentoCartao.class)
+        })
+
 public class Pagamento implements Serializable { //adicionar um novo tipo no corpo da requisiçaõ com o nome de type. ficará type: pagamentoBoleto/pagamentoCartao
 
     private static final long serialVersionUID = 1L;
