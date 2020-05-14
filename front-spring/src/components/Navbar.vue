@@ -56,7 +56,7 @@ export default {
       {
         id:'3',
         nome:'Fazer Pedido',
-        route:'#'
+        route:'/add-pedido'
       },
       {
         id:'4',
