@@ -10,9 +10,37 @@
         <b-form-select v-model="selectedEndereco" :options="tableDataEndereco"></b-form-select>
       </b-form-group>
 
-      <b-form-group label="Itens">
-        <b-form-select v-model="selectedItem" :options="tableDataItens"></b-form-select>
+      <b-form-group label="Tagged input using select">
+        <!-- prop `add-on-change` is needed to enable adding tags vie the `change` event -->
+        <b-form-tags v-model="value" size="lg" add-on-change no-outer-focus class="mb-2">
+          <template v-slot="{ tags, inputAttrs, inputHandlers, disabled, removeTag }">
+            <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
+              <li v-for="tag in tags" :key="tag" class="list-inline-item">
+                <b-form-tag
+                  tagClass="Object"
+                  @remove="removeTag(tag)"
+                  :title="tag"
+                  :disabled="disabled"
+                  variant="info"
+                >{{ tag }}</b-form-tag>
+              </li>
+            </ul>
+
+            <b-form-select
+              v-bind="inputAttrs"
+              v-on="inputHandlers"
+              :disabled="disabled || availableOptions.length === 0"
+              :options="availableOptions"
+            >
+              <template v-slot:first>
+                <!-- This is required to prevent bugs with Safari -->
+                <option disabled value>Choose a tag...</option>
+              </template>
+            </b-form-select>
+          </template>
+        </b-form-tags>
       </b-form-group>
+
       <button @click="teste()">OK</button>
     </div>
   </div>
@@ -31,6 +59,7 @@ export default {
     },
     data(){
         return {
+            value:[],
             tableDataCliente:[],
             tableDataItens:[],
             tableDataEndereco:[],
@@ -43,112 +72,124 @@ export default {
                     numeroDeParcelas : 10,
                     type: "PagamentoCartao"
                 },
-                itens : []
-
-
-            },
-            selectedCliente:"",
-            selectedItem:"",
-            selectedEndereco:"",
-
-        }
-    },
-
-    watch: {
-        selectedCliente(newValue){
-            this.tableDataEndereco = []
-            try {
-                newValue.enderecos.forEach(element => {
-                    const temp = {
-                        text: element.logradouro,
-                        value: element
-                    }
-                    this.tableDataEndereco.push(temp)
-                    
-                })
-                
-            }
-            catch(e){
-                alert("erro")
-            }
-            
-        }
-
-
-    },
-
-    async mounted(){
-        try{
-            const res = await Cliente.getAll();
-            const res1 = await Produto.getPage();
-
-            if(Object.keys(res) != 0){
-                res.data.forEach(element => {
-                    const temp = {
-                        text: element.nome,
-                        value: element
-                    }
-                // if(Object.keys(element.enderecos) != 0){
-                //     element.enderecos.forEach(endereco => {
-                //         const temp2 = {
-                //             text: endereco.logradouro,
-                //             value: endereco
-                //         }
-                //         this.tableDataEndereco.push(temp2)
-                //     })
-                // }
-                    
-                    this.tableDataCliente.push(temp)
-                });
-            }
-
-            if(Object.keys(res1) != 0){
-                res1.data.content.forEach(element => {
-                    const temp1 = {
-                        text: element.nome,
-                        value: element
-                    }
-                    
-                    
-                    this.tableDataItens.push(temp1)
-                });
-            }
-            
-        }
+        itens: []
+      },
+      selectedCliente: "",
+      selectedItem: [],
+      selectedEndereco: ""
+    };
+  },
+  computed: {
+    availableOptions() {
+        const aux = [];
+        this.tableDataItens.forEach((element, index) => {
+            aux[index] = element.text;
+        });
         
-        catch(e){
-            alert(e.message)
-        }
-    },
-    methods:{
-        teste(){
-            this.tableData.cliente = this.selectedCliente;
-            this.tableData.enderecoEntrega = this.selectedEndereco;
-             const temp = {
-                 quantidade : 1,
-                    produto : {
-                        id: this.selectedItem.id 
-                    }
-             }
+        
+        this.value.forEach(element => {
+            this.tableDataItens.forEach(element2 => {
+                if(element == element2.text){
+                    this.selectedItem.push(element2)
+                }
+            });
             
-            this.tableData.itens.push(temp)
+        })
 
-            
-            try{
-                Pedido.post(this.tableData)
-                alert("deu")
+      return aux.filter(opt =>
 
-            }
-            catch(e){
-                alert(e)
-            }
+          this.value.indexOf(opt) === -1
 
-            
-        }
+      ) // deleta ele da lista
     }
+  },
 
+  watch: {
+      selectedItem(value){
+          console.log(value);
+          
+      },
+    selectedCliente(newValue) {
+     if(newValue != ""){
+      this.tableDataEndereco = [];
 
-}
+      try {
+        newValue.enderecos.forEach(element => {
+          const temp = {
+            text: element.logradouro,
+            value: element
+          };
+          this.tableDataEndereco.push(temp);
+        });
+      } catch (e) {
+        alert("erro");
+      }
+     }
+    }
+  },
+
+  async mounted() {
+    try {
+      const res = await Cliente.getAll();
+      const res1 = await Produto.getPage();
+
+      if (Object.keys(res) != 0) {
+        res.data.forEach(element => {
+          const temp = {
+            text: element.nome,
+            value: element
+          };
+
+          this.tableDataCliente.push(temp);
+        });
+      }
+
+      if (Object.keys(res1) != 0) {
+        res1.data.content.forEach(element => {
+          const temp1 = {
+            text: element.nome,
+            value: element
+          };
+
+          this.tableDataItens.push(temp1);
+        });
+      }
+    } catch (e) {
+      alert(e.message);
+    }
+  },
+  methods: {
+
+    teste() {
+      this.tableData.cliente = this.selectedCliente;
+      this.tableData.enderecoEntrega = this.selectedEndereco;
+      this.selectedItem.forEach(element => {
+          const temp = {
+            quantidade: 1,
+            produto: {
+                id: element.value.id,
+                nome: element.value.nome,
+                preco: element.value.preco
+        }
+      };
+          this.tableData.itens.push(temp);
+      })
+
+      try {
+        Pedido.post(this.tableData);
+        this.resetForm()
+        
+      } catch (e) {
+        alert(e);
+      }
+    },
+    resetForm(){
+        this.selectedCliente = ""
+        this.selectedEndereco = ""
+        this.selectedItem = ""
+    }
+  }
+};
 </script>
 
 <style scoped>
