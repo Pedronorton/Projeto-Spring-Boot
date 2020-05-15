@@ -4,6 +4,10 @@ const getAll = () =>{
     return Api().get('clientes')
 }
 
+const getOne = (id) => {
+    return Api().get(`/clientes/${id}`)
+}
+
 const post = (data) => {
     return Api().post('/clientes', data)
 }
@@ -17,6 +21,7 @@ const put = (id,data) => {
 }
 export default {
     getAll,
+    getOne,
     post,
     del,
     put
