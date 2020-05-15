@@ -10,7 +10,7 @@
         <b-form-select v-model="selectedEndereco" :options="tableDataEndereco"></b-form-select>
       </b-form-group>
 
-      <b-form-group label="Tagged input using select">
+      <b-form-group label="Produtos">
         <!-- prop `add-on-change` is needed to enable adding tags vie the `change` event -->
         <b-form-tags v-model="value" size="lg" add-on-change no-outer-focus class="mb-2">
           <template v-slot="{ tags, inputAttrs, inputHandlers, disabled, removeTag }">
@@ -34,7 +34,7 @@
             >
               <template v-slot:first>
                 <!-- This is required to prevent bugs with Safari -->
-                <option disabled value>Choose a tag...</option>
+                <option disabled value>Escolha seus produtos.</option>
               </template>
             </b-form-select>
           </template>
@@ -105,10 +105,6 @@ export default {
   },
 
   watch: {
-      selectedItem(value){
-          console.log(value);
-          
-      },
     selectedCliente(newValue) {
      if(newValue != ""){
       this.tableDataEndereco = [];
@@ -178,7 +174,7 @@ export default {
       try {
         Pedido.post(this.tableData);
         this.resetForm()
-        
+
       } catch (e) {
         alert(e);
       }
