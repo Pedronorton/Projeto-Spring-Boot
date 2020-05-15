@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class PedidoService {
@@ -47,6 +44,13 @@ public class PedidoService {
         Optional<Pedido> obj = repo.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado | id: "+ id + "tipo: "+Pedido.class.getName()));
     }
+
+    public List<Pedido> getAll(){
+        List<Pedido> obj = repo.findAll();
+        return obj;
+    }
+
+
 
     @Transactional
     public Pedido insert(Pedido obj){
