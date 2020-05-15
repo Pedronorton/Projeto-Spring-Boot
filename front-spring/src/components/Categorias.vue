@@ -7,47 +7,35 @@
       <p class="my-4"></p>
     </b-modal>
 
-    <b-modal id="modal-edit" title="Editar" @ok="handleEdit(editItem)">
-      <p class="my-4"></p>
-
-      <form ref="form" >
-        <b-form-group
-          label="Nome"
-        >
-          <b-form-input  v-model="editItem.nome" ></b-form-input>
-        </b-form-group>
-
-      </form>
-    </b-modal>
-
     <div class="container-list">
       <div class="container-title">
         <h1 class="title">Lista de categorias</h1>
         <Button class="title button-title" message="Adicionar" path="/add-categoria"></Button>
       </div>
       <div class="list-categoria">
-        <ul class="list-group">
-          <li
-            class="list-group-item d-flex justify-content-between align-items-center element-categoria"
-            v-for="(categoria,index) in listCategoria"
-            v-bind:key="index"
-          >
-            {{categoria.nome}}
-            <div class="icons">
-              <b-icon
-                class="icon-delete"
-                icon="trash-fill"
-                aria-hidden="true"
-                @click="showModal(categoria)"
-              ></b-icon>
-              <b-icon 
-              icon="pencil" 
-              aria-hidden="true" 
-              v-b-modal="'modal-edit'"
-              @click="handleSubmitEdit(categoria)" ></b-icon>
-            </div>
-          </li>
-        </ul>
+        <b-table :items="tableData" :fields="fields" striped responsive="sm" :busy="isBusy">
+          <template v-slot:cell(opções)="row">
+            <b-icon class="icon" icon="trash-fill" aria-hidden="true" @click="showModal(row.item)" ></b-icon>
+            <b-icon class="icon" icon="pencil" aria-hidden="true" @click="row.toggleDetails"></b-icon>
+          </template>
+    
+          <template v-slot:row-details="row" v-slot:table-busy>
+            <b-card>
+              <b-form>
+                <h1>Editar item</h1>
+                <b-form-group>
+                  <b-input v-model="row.item.id" disabled></b-input>
+                </b-form-group>
+
+                <b-form-group>
+                  <b-input v-model="row.item.nome"></b-input>
+                </b-form-group>
+
+              </b-form>
+              <b-button size="sm" @click="handleEdit(row.item)" variant="primary">Salvar</b-button>
+            </b-card>
+          </template>
+        </b-table>
       </div>
     </div>
   </div>
@@ -61,7 +49,13 @@ import Button from "../components/utils/Button";
 export default {
   data() {
     return {
-      listCategoria: [],
+      fields: [
+        "id",
+        "nome",
+        "opções"
+      ],
+      isBusy: false,
+      tableData: [],
       visible: null,
       alertBody: {
         message: "",
@@ -92,7 +86,7 @@ export default {
             id: element.id,
             nome: element.nome
           };
-          this.listCategoria.push(temp);
+          this.tableData.push(temp);
         });
       } else {
         const temp = {
@@ -127,8 +121,12 @@ export default {
     async handleDelete() {
       try {
         await Categoria.del(this.itemDelete.id);
-        const index = this.listCategoria.indexOf(this.itemDelete)
-        this.listCategoria.splice(index,1)
+
+        const index = this.tableData.indexOf(this.itemDelete)
+        this.tableData.splice(index,1)
+
+        
+
         const temp = {
           message: "Item deletado com sucesso ! ",
           type: "primary"
@@ -149,6 +147,7 @@ export default {
           this.visible = null;
         }, 5000);
       }
+
     },
 
     handleSubmitEdit(item){
@@ -189,7 +188,7 @@ export default {
 </script>
 
 <style scoped>
-.icon-delete {
+.icon {
   margin-right: 10px;
 }
 .button-title {
