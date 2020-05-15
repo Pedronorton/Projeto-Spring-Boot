@@ -7,7 +7,7 @@ import AddUser from '../components/AdicionarUsuario'
 import Produto from '../components/Produto'
 import AddCategoria from '../components/AdicionarCategoria'
 import FormPedidos from '../components/FormPedidos'
-
+import Pedido from "../components/Pedido"
 Vue.use(Router)
 
 export default new Router({
@@ -49,6 +49,11 @@ export default new Router({
       path: '/add-pedido',
       name: 'FormPedidos',
       component: FormPedidos 
+    }, 
+    {
+      path: '/pedidos',
+      name: 'Pedido',
+      component: Pedido
     }, 
   ]
 })

@@ -68,6 +68,11 @@ export default {
         nome:'Usuarios',
         route:'/clientes'
       },
+      {
+        id:'6',
+        nome:'Ver Pedidos',
+        route:'/pedidos'
+      },
       
       ]
     }
