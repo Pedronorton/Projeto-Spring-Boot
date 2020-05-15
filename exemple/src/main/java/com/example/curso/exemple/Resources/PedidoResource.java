@@ -10,6 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/pedidos")
@@ -17,6 +18,16 @@ public class PedidoResource {
 
     @Autowired
     private PedidoService service;
+
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<?> getAll(){
+
+        List<Pedido> list = service.getAll();
+
+        return ResponseEntity.ok().body(list);
+    }
+
+
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> find(@PathVariable Integer id){
