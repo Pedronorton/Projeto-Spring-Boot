@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Navbar class="navb" />
     <Alert :message="alertBody.message" :type="alertBody.type" :visible="visible" />
 
     <b-modal id="modal-delete1" title="Tem certeza que deseja deletar" @ok="handleDelete()">
@@ -43,7 +42,6 @@
 
 <script>
 import Categoria from "../services/categoria";
-import Navbar from "../components/Navbar";
 import Alert from "../components/utils/Alert";
 import Button from "../components/utils/Button";
 export default {
@@ -71,7 +69,6 @@ export default {
 
   name: "teste",
   components: {
-    Navbar,
     Alert,
     Button
   },
