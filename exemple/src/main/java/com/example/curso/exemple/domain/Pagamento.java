@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")// quando se tem classes filhas onde as filhas serão instanciadas, os dados que vem na requisição tem que ser desse tipo, irá
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")// quando se tem classes filhas onde as filhas serão instanciadas, os dados que vem na requisição tem que ser desse tipo, irá
 @JsonSubTypes(
         {
                 @JsonSubTypes.Type(name = "PagamentoBoleto", value = PagamentoBoleto.class),
