@@ -8,15 +8,23 @@ import Produto from '../components/Produto'
 import AddCategoria from '../components/AdicionarCategoria'
 import FormPedidos from '../components/FormPedidos'
 import Pedido from "../components/Pedido"
+import AdminRouter from "../components/AdminRouter"
 Vue.use(Router)
 
 export default new Router({
   mode: 'history',
   routes: [
     {
+      path:"",
+      name:"AdminRouter",
+      component:AdminRouter , 
+    children:
+    [
+    {
       path: '/',
       name: 'Home',
-      component: Home 
+      component: Home,
+      
     },
     {
       path: '/categorias',
@@ -28,18 +36,22 @@ export default new Router({
       name: 'Clientes',
       component: Usuarios 
     },
-
+    {
+      path: '/produtos',
+      name: 'Produto',
+      component: Produto 
+    },
+    {
+      path: '/pedidos',
+      name: 'Pedido',
+      component: Pedido
+    },
     {
       path: '/add-user',
       name: 'AdicionarUsuario',
       component: AddUser 
     },
-
-    {
-      path: '/produtos',
-      name: 'Produto',
-      component: Produto 
-    },   
+   
     {
       path: '/add-categoria',
       name: 'AdicionarCategoria',
@@ -50,10 +62,9 @@ export default new Router({
       name: 'FormPedidos',
       component: FormPedidos 
     }, 
-    {
-      path: '/pedidos',
-      name: 'Pedido',
-      component: Pedido
-    }, 
+  ]
+},
+    
+     
   ]
 })
