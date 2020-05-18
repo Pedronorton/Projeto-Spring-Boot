@@ -1,13 +1,14 @@
 <template>
-  <div>
-    <Navbar class="navb" />
-    
-    <div class="container-list">
-      <div class="container-title">
+  <div class="container">
+  
+    <div>
+      <div class="container-header" >
+
         <h1 class="title">Lista de Pedidos</h1>
-        <Button class="title button-title" message="Adicionar" path="/add-categoria"></Button>
+        <Button class="button-title" message="Adicionar" path="/add-pedido"></Button>
       </div>
-      <div class="list-categoria">
+
+      <div >
         <b-table striped hover :items="tableData"></b-table>
       </div>
     </div>
@@ -15,7 +16,6 @@
 </template>
 
 <script>
-import Navbar from "../components/Navbar";
 // import Alert from "../components/utils/Alert";
 import Button from "../components/utils/Button";
 import Pedido from "../services/pedido"
@@ -24,7 +24,6 @@ import Pedido from "../services/pedido"
 export default {
     name: 'Pedido',
     components:{
-        Navbar,
         // Alert,
         Button
     },
@@ -56,6 +55,13 @@ export default {
 </script>
 
 <style scoped>
+
+.container-header{
+  display: inline;
+}
+.title {
+  display: inline;
+}
 
 
 </style>

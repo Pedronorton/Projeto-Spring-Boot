@@ -28,29 +28,29 @@
     <div class="container-list">
       <h1>Lista de Produtos</h1>
       <div class="list-categoria">
-        <ul class="list-group">
-          <li
-            class="list-group-item d-flex justify-content-between align-items-center element-categoria"
-            v-for="(produto,index) in tableData"
-            v-bind:key="index"
-          >
-            {{index}}
-            {{produto.nome}}
-            <div class="icons">
-              <b-icon
-                class="icon-delete"
-                icon="trash-fill"
-                aria-hidden="true"
-                @click="showModal(produto)"
-              ></b-icon>
-              <b-icon 
-              icon="pencil" 
-              aria-hidden="true" 
-              v-b-modal="'modal-edit'"
-              @click="handleSubmitEdit(produto)" ></b-icon>
-            </div>
-          </li>
-        </ul>
+        <b-table :items="tableData" :fields="fields" striped responsive="sm" :busy="isBusy">
+          <template v-slot:cell(opções)="row">
+            <b-icon class="icon" icon="trash-fill" aria-hidden="true" @click="showModal(row.item)" ></b-icon>
+            <b-icon class="icon" icon="pencil" aria-hidden="true" @click="row.toggleDetails"></b-icon>
+          </template>
+    
+          <template v-slot:row-details="row" v-slot:table-busy>
+            <b-card>
+              <b-form>
+                <h1>Editar item</h1>
+                <b-form-group>
+                  <b-input v-model="row.item.nome" disabled></b-input>
+                </b-form-group>
+
+                <b-form-group>
+                  <b-input v-model="row.item.preco"></b-input>
+                </b-form-group>
+
+              </b-form>
+              <b-button size="sm" @click="handleEdit(row.item)" variant="primary">Salvar</b-button>
+            </b-card>
+          </template>
+        </b-table>
         <FormAddCategoria @emit-click="insertListner"/>
         <b-pagination
           v-model="currentPage"
@@ -77,7 +77,12 @@ export default {
       perPage: 10,
       currentPage: 1,
       tableData: [],
-
+      fields:
+      ["nome",
+      "preco",
+      "opções"
+      ],
+      isBusy: false,
       editItem: {
         nome:"",
         preco:""
@@ -143,7 +148,7 @@ export default {
   },
   methods: {
     insertListner(item, flag){
-      
+
       var temp
       if(flag === 1){
         temp = {
@@ -193,9 +198,7 @@ export default {
         }, 5000);
       }
     },
-    handleSubmitEdit(item){
-      this.editItem = item
-    },
+    
     async handleEdit(item){
       try {
         Produto.put(item.id, item)
@@ -228,14 +231,8 @@ export default {
 </script>
 
 <style scoped>
-.icon-delete {
+.icon {
   margin-right: 10px;
-}
-
-.navb {
-  width: 100%;
-  top: 0;
-  position: absolute;
 }
 .element-categoria {
   cursor: pointer;

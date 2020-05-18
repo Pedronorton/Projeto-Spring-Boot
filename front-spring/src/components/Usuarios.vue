@@ -1,21 +1,27 @@
 <template>
   <div>
-    <Navbar id="teste" class="navb" />
     <Alert class="teste" :message="alertBody.message" :type="alertBody.type" :visible="visible" />
 
-    <b-modal id="delete-modal" title="Tem certeza que deseja deletar o item ?" @ok="handleDelete()">
-    </b-modal>
+    <b-modal id="delete-modal" title="Tem certeza que deseja deletar o item ?" @ok="handleDelete()"></b-modal>
 
     <div class="container-list">
-      <h1>Lista de Clientes</h1>
-      <div class="list-categoria">
-
+      <div class="container-header">
+        <h1>Lista de Clientes</h1>
+        <Button class="title button-title" message="Adicionar" path="/add-user"></Button>
+      </div>
+      
+      <div>
         <b-table :items="tableData" :fields="fields" striped responsive="sm" :busy="isBusy">
           <template v-slot:cell(opções)="row">
-            <b-icon class="icon" icon="trash-fill" aria-hidden="true" @click="showDeleteModal(row.item)" ></b-icon>
+            <b-icon
+              class="icon"
+              icon="trash-fill"
+              aria-hidden="true"
+              @click="showDeleteModal(row.item)"
+            ></b-icon>
             <b-icon class="icon" icon="pencil" aria-hidden="true" @click="row.toggleDetails"></b-icon>
           </template>
-    
+
           <template v-slot:row-details="row" v-slot:table-busy>
             <b-card>
               <b-form>
@@ -55,8 +61,8 @@
 
 <script>
 import Clientes from "../services/cliente";
-import Navbar from "../components/Navbar";
 import Alert from "../components/utils/Alert";
+import Button from "../components/utils/Button";
 export default {
   data() {
     return {
@@ -73,7 +79,7 @@ export default {
       isBusy: false,
       tableData: [],
       editedItem: {
-        id:"",
+        id: "",
         nome: "",
         cpfOuCnpj: "",
         email: "",
@@ -95,25 +101,24 @@ export default {
 
       options: [
         { item: 1, name: "Pessoa Física" },
-        { item: 2, name: "Pessoa Júridica" },
-      ],
+        { item: 2, name: "Pessoa Júridica" }
+      ]
     };
   },
 
   name: "Clientes",
   components: {
-    Navbar,
-    Alert
+    Alert,
+    Button
   },
 
   async created() {
     try {
-      this.isBusy = true
+      this.isBusy = true;
       const res = await Clientes.getAll();
 
       if (Object.keys(res.data).length != 0) {
         res.data.forEach(element => {
-          
           const temp = {
             id: element.id,
             nome: element.nome,
@@ -151,11 +156,11 @@ export default {
         this.visible = null;
       }, 5000);
     }
-    this.isBusy = false
+    this.isBusy = false;
   },
   methods: {
-    showDeleteModal(item){
-      this.deletedItem = item
+    showDeleteModal(item) {
+      this.deletedItem = item;
       this.$bvModal.show("delete-modal");
     },
 
@@ -174,13 +179,12 @@ export default {
     },
 
     async handleDelete() {
-      
       this.$bvModal.hide("delete-modal"); // proprio do componente
-      
+
       try {
         await Clientes.del(this.deletedItem.id);
-        const index = this.tableData.indexOf(this.deletedItem)
-        this.tableData.splice(index,1)
+        const index = this.tableData.indexOf(this.deletedItem);
+        this.tableData.splice(index, 1);
 
         const temp = {
           message: "Cliente deletado com sucesso !",
@@ -244,6 +248,10 @@ export default {
 </script>
 
 <style scoped>
+.container-header {
+  flex-direction: row;
+  display: flex;
+}
 .navb {
   width: 100%;
   top: 0;
