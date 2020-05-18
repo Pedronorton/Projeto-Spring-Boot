@@ -13,7 +13,7 @@ const del = (id) => {
 }
 
 const put = (id, data) => {
-    return Api().put(`/categoia/${id}`,data)
+    return Api().put(`/categoria/${id}`,data)
 }
 
 export default {
