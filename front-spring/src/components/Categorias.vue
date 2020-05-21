@@ -6,30 +6,18 @@
       <p class="my-4"></p>
     </b-modal>
 
-    <b-modal id="modal-save" title="Cadastrar Categoria" @ok="handleSave()">
-      <div>
-
-        <b-form>
-          <b-form-group label="Nome">
-            <b-input v-model="saveItem.nome"></b-input>
-          </b-form-group>
-        </b-form>
-
-      </div>
-    </b-modal>
-
-
+    <SaveCategoriaModal @emit-click="insertListner" />
 
     <div class="container-list">
       <div class="container-title">
         <h1 class="title">Lista de categorias</h1>
-        <b-button class="title button-title" v-b-modal.modal-save>Adicionar</b-button>
+        <b-button class="title button-title" @click="showModalSave()">Adicionar</b-button>
       </div>
       <div class="list-categoria">
         <b-table :items="tableData" :fields="fields" striped responsive="sm" :busy="isBusy">
 
           <template v-slot:cell(opções)="row">
-            <b-icon class="icon" icon="trash-fill" aria-hidden="true" @click="showModal(row.item)" ></b-icon>
+            <b-icon class="icon" icon="trash-fill" aria-hidden="true" @click="showModalDelete(row.item)" ></b-icon>
             <b-icon class="icon" icon="pencil" aria-hidden="true" @click="row.toggleDetails"></b-icon>
           </template>
     
@@ -58,6 +46,8 @@
 <script>
 import Categoria from "../services/categoria";
 import Alert from "../components/utils/Alert";
+import SaveCategoriaModal from "../components/modals/SaveCategoriaModal"
+
 import {mapActions} from 'vuex'
 export default {
   data() {
@@ -89,6 +79,7 @@ export default {
   name: "teste",
   components: {
     Alert,
+    SaveCategoriaModal
   },
 
   async mounted() {
@@ -105,7 +96,6 @@ export default {
         });
       } else {
         this.showAlert("Nenhuma categoria cadastrada", "info", null)
-
       }
     } catch (e) {
       this.showAlert("Erro ao buscar no banco", "danger", e.message)
@@ -115,8 +105,24 @@ export default {
     ...mapActions([
       'setTime'
     ]),
+    insertListner(item, response){
+      if(response != null){
+        this.showAlert("Item cadastrado com sucesso ! ", "primary", null)
+        const temp = {
+          id: response,
+          nome: item.nome
+        }
+        this.tableData.push(temp)
+      }else{
+        this.showAlert("Erro ao deletar item", "danger", item.message)
+      }
+    },
 
-    showModal(item) {
+    showModalSave(){
+      this.$bvModal.show('modal-save')
+    },
+
+    showModalDelete(item) {
       this.itemDelete = item;
       this.$bvModal.show("modal-delete1");
     },
@@ -132,19 +138,6 @@ export default {
         this.alertBody = temp;
         this.$store.dispatch('setTime',5)
     },
-
-    async handleSave(){  
-      try{
-        await Categoria.post(this.saveItem)
-        this.tableData.push(this.saveItem)
-        this.showAlert("Item cadastrado com sucesso ! ", "primary", null)
-        
-      }
-      catch(e){
-        this.showAlert("Erro ao deletar item", "danger", e.message)
-      }
-    },
-    
 
     async handleDelete() {
       try {
@@ -169,10 +162,7 @@ export default {
     async handleEdit(item){
 
       try{
-        
-        
         await Categoria.put(item.id, item)
-
         this.showAlert("Item atualizado com sucesso !", "primary", null)
 
       }
@@ -187,11 +177,10 @@ export default {
 <style scoped>
 .icon {
   margin-right: 10px;
+  cursor: pointer;
 }
 .button-title {
   right: 0;
-  /* position: absolute; */
-  /* margin-left: 50px; */
 }
 .container-title {
   width: 70%;
