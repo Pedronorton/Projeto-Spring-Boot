@@ -5,34 +5,7 @@
       <p class="my-4"></p>
     </b-modal>
 
-    <!-- MODAL EDIT -->
-    <b-modal id="modal-edit" title="Editar" @ok="handleEdit(editItem)">
-      <p class="my-4"></p>
-
-      <form ref="form">
-        <b-form-group label="Nome">
-          <b-form-input v-model="editItem.nome"></b-form-input>
-        </b-form-group>
-
-        <b-form-group label="Preço">
-          <b-form-input v-model="editItem.preco"></b-form-input>
-        </b-form-group>
-      </form>
-    </b-modal>
-    <!-- MODAL SAVE -->
-    <b-modal id="modal-save" title="Cadastrar" @ok="handleSave(saveItem)">
-      <p class="my-4"></p>
-
-      <form ref="form">
-        <b-form-group label="Nome">
-          <b-form-input v-model="saveItem.nome"></b-form-input>
-        </b-form-group>
-
-        <b-form-group label="Preço">
-          <b-form-input v-model="saveItem.preco"></b-form-input>
-        </b-form-group>
-      </form>
-    </b-modal>
+    <SaveProdutoModal @emit-click="insertListner" />
     <!-- --------------------- -->
     <div class="container-list">
       <h1>Lista de Produtos</h1>
@@ -62,7 +35,6 @@
             </b-card>
           </template>
         </b-table>
-        <!-- <FormAddCategoria @emit-click="insertListner"/> -->
       </div>
     </div>
   </div>
@@ -70,7 +42,7 @@
 
 <script>
 import Produto from "../services/produto";
-// import FormAddCategoria from "../components/FormAddCategoria";
+import SaveProdutoModal from "./modals/SaveProdutoModal"
 import Alert from "../components/utils/Alert";
 
 export default {
@@ -100,7 +72,7 @@ export default {
 
   name: "Produto",
   components: {
-    // FormAddCategoria,
+    SaveProdutoModal,
     Alert
   },
 
@@ -126,27 +98,19 @@ export default {
     }
   },
   methods: {
-    // insertListner(item, flag){
-
-    //   var temp
-    //   if(flag === 1){
-    //     temp = {
-    //       message: "Item inserido com sucesso ! ",
-    //       type: "primary"
-    //     };
-    //   }else if(flag === 2){
-    //     temp = {
-    //       message: "Erro ao inserir item: "+ item.message,
-    //       type: "danger"
-    //     };
-    //   }
-    //   this.alertBody = temp;
-    //   this.visible = 5;
-    //   setTimeout(function() {
-    //     this.visible = null;
-    //   }, 5000);
-
-    // },
+    insertListner(item, response){
+      if(response != null){
+        this.showAlert("Item cadastrado com sucesso ! ", "primary", null)
+        const temp = {
+          id: response,
+          nome: item.nome,
+          preco: item.preco
+        }
+        this.tableData.push(temp)
+      }else{
+        this.showAlert("Erro ao deletar item", "danger", item.message)
+      }
+    },
 
     showAlert(msg, type, error) {
       const temp = {
@@ -165,15 +129,6 @@ export default {
       this.$bvModal.show("modal-delete1");
     },
 
-    async handleSave() {
-      try {
-        await Produto.post(this.saveItem);
-        this.showAlert("Item cadastrado com sucesso !", "primary", null)
-
-      } catch (e) {
-        this.showAlert("Erro ao cadastrar item", "danger", e.message)
-      }
-    },
     async handleDelete() {
       try {
         await Produto.del(this.deleteItem.id);
@@ -202,6 +157,7 @@ export default {
 <style scoped>
 .icon {
   margin-right: 10px;
+  cursor: pointer;
 }
 .element-categoria {
   cursor: pointer;
