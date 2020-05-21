@@ -164,8 +164,8 @@ export default {
       
       try {
         const res = await Cidade.getId(this.cidade_nome)
-        console.log(typeof res.data.id);
-        this.formUser.cidade_id = res.data.id
+        
+        this.formUser.cidade_id = res.data.id  
         this.formUser.tipo = this.selected
         await Cliente.post(this.formUser);
         const temp = {

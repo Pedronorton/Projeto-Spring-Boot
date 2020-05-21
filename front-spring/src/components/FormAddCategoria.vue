@@ -6,7 +6,7 @@
       <b-modal id="modal-1" title="Adicionar Produto" @ok="handleOk">
         <form>
           <div class="form-group">
-            <label for="exampleInputEmail1">Nome</label>
+            <label >Nome</label>
             <input
               v-model="produto.nome"
               class="form-control"
@@ -16,7 +16,7 @@
             />
           </div>
           <div class="form-group">
-            <label for="exampleInputPassword1">Valor</label>
+            <label >Valor</label>
             <input
               v-model="produto.preco"
               type="number"

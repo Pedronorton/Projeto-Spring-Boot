@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Navbar class="navb" />
-    <div>
+    <div class="container">
+      <h1 class="title">Fazer pedido</h1>
       <b-form-group label="Selecione o cliente">
         <b-form-select v-model="selectedCliente" :options="tableDataCliente" change="teste"></b-form-select>
       </b-form-group>
@@ -40,8 +40,7 @@
           </template>
         </b-form-tags>
       </b-form-group>
-
-      <button @click="teste()">OK</button>
+      <b-button @click="handleSave()">Salvar</b-button>
     </div>
   </div>
 </template>
@@ -50,11 +49,9 @@
 import Cliente from "../services/cliente"
 import Produto from "../services/produto"
 import Pedido from "../services/pedido"
-import Navbar from "../components/Navbar"
 export default {
     name: 'FormPedidos',
     components:{
-        Navbar,
 
     },
     data(){
@@ -156,7 +153,7 @@ export default {
   },
   methods: {
 
-    teste() {
+    handleSave() {
       this.tableData.cliente = this.selectedCliente;
       this.tableData.enderecoEntrega = this.selectedEndereco;
       this.selectedItem.forEach(element => {
@@ -182,16 +179,15 @@ export default {
     resetForm(){
         this.selectedCliente = ""
         this.selectedEndereco = ""
-        this.selectedItem = ""
+        this.selectedItem = []
+        this.value= []
     }
   }
 };
 </script>
 
 <style scoped>
-.navb {
-  width: 100%;
-  top: 0;
-  position: absolute;
+.title{
+  margin-bottom: 40px;
 }
 </style>
