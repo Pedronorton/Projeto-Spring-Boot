@@ -46,7 +46,8 @@ public class ClienteResource {
         Cliente obj = service.fromDTO(objDto);
         obj = service.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.ok().body(obj.getId());
+        //return ResponseEntity.created(uri).build();
     }
 
    @RequestMapping(method = RequestMethod.GET)
