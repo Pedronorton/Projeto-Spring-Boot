@@ -6,13 +6,28 @@
       <p class="my-4"></p>
     </b-modal>
 
+    <b-modal id="modal-save" title="Cadastrar Categoria" @ok="handleSave()">
+      <div>
+
+        <b-form>
+          <b-form-group label="Nome">
+            <b-input v-model="saveItem.nome"></b-input>
+          </b-form-group>
+        </b-form>
+
+      </div>
+    </b-modal>
+
+
+
     <div class="container-list">
       <div class="container-title">
         <h1 class="title">Lista de categorias</h1>
-        <Button class="title button-title" message="Adicionar" path="/add-categoria"></Button>
+        <b-button class="title button-title" v-b-modal.modal-save>Adicionar</b-button>
       </div>
       <div class="list-categoria">
         <b-table :items="tableData" :fields="fields" striped responsive="sm" :busy="isBusy">
+
           <template v-slot:cell(opções)="row">
             <b-icon class="icon" icon="trash-fill" aria-hidden="true" @click="showModal(row.item)" ></b-icon>
             <b-icon class="icon" icon="pencil" aria-hidden="true" @click="row.toggleDetails"></b-icon>
@@ -43,7 +58,7 @@
 <script>
 import Categoria from "../services/categoria";
 import Alert from "../components/utils/Alert";
-import Button from "../components/utils/Button";
+import {mapActions} from 'vuex'
 export default {
   data() {
     return {
@@ -63,14 +78,17 @@ export default {
 
       editItem:{
         nome:""
-      }
+      },
+      saveItem:{
+        id:"",
+        nome:""
+      },
     };
   },
 
   name: "teste",
   components: {
     Alert,
-    Button
   },
 
   async mounted() {
@@ -86,34 +104,47 @@ export default {
           this.tableData.push(temp);
         });
       } else {
-        const temp = {
-          message: "Nenhuma categoria cadastrada",
-          type: "info"
-        };
-        this.alertBody = temp;
-        this.visible = 5;
-        setTimeout(function() {
-          this.visible = null;
-        }, 5000);
+        this.showAlert("Nenhuma categoria cadastrada", "info", null)
+
       }
     } catch (e) {
-      const temp = {
-        message: "Erro ao buscar no banco: " + e.message,
-        type: "danger"
-      };
-      this.alertBody = temp;
-      this.visible = 5;
-      setTimeout(function() {
-        this.visible = null;
-      }, 5000);
+      this.showAlert("Erro ao buscar no banco", "danger", e.message)
     }
   },
   methods: {
+    ...mapActions([
+      'setTime'
+    ]),
 
     showModal(item) {
       this.itemDelete = item;
       this.$bvModal.show("modal-delete1");
     },
+
+    showAlert(msg,type,error){
+      const temp = {
+        message: msg,
+        type: type
+      }
+      if(error != null){
+        temp.message = temp.message+": "+error
+      }
+        this.alertBody = temp;
+        this.$store.dispatch('setTime',5)
+    },
+
+    async handleSave(){  
+      try{
+        await Categoria.post(this.saveItem)
+        this.tableData.push(this.saveItem)
+        this.showAlert("Item cadastrado com sucesso ! ", "primary", null)
+        
+      }
+      catch(e){
+        this.showAlert("Erro ao deletar item", "danger", e.message)
+      }
+    },
+    
 
     async handleDelete() {
       try {
@@ -122,27 +153,11 @@ export default {
         const index = this.tableData.indexOf(this.itemDelete)
         this.tableData.splice(index,1)
 
-        
+        this.showAlert("Item deletado com sucesso ! ", "primary", null)
 
-        const temp = {
-          message: "Item deletado com sucesso ! ",
-          type: "primary"
-        };
-        this.alertBody = temp;
-        this.visible = 5;
-        setTimeout(function() {
-          this.visible = null;
-        }, 5000);
       } catch (e) {
-        const temp = {
-          message: "Erro ao deletar categoria " + e.message,
-          type: "danger"
-        };
-        this.alertBody = temp;
-        this.visible = 5;
-        setTimeout(function() {
-          this.visible = null;
-        }, 5000);
+        this.showAlert("Erro ao deletar item", "danger", e.message)
+
       }
 
     },
@@ -154,30 +169,15 @@ export default {
     async handleEdit(item){
 
       try{
-        console.log(item);
+        
         
         await Categoria.put(item.id, item)
-        const temp = {
-          message: "Item atualizado com sucesso !",
-          type: "primary"
-        };
-        this.alertBody = temp;
-        this.visible = 5;
-        setTimeout(function() {
-          this.visible = null;
-        }, 5000);
+
+        this.showAlert("Item atualizado com sucesso !", "primary", null)
 
       }
       catch(e){
-        const temp = {
-          message: "Erro ao atualizar item: "+e.message,
-          type: "danger"
-        };
-        this.alertBody = temp;
-        this.visible = 5;
-        setTimeout(function() {
-          this.visible = null;
-        }, 5000);
+        this.showAlert("Erro ao atualizar item", "danger", e.message)
       }
     }
   }

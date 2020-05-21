@@ -1,39 +1,51 @@
 <template>
   <div>
-    <Navbar class="navb" />
     <Alert :message="alertBody.message" :type="alertBody.type" :visible="visible" />
     <b-modal id="modal-delete1" title="Tem certeza que deseja deletar" @ok="handleDelete()">
       <p class="my-4"></p>
     </b-modal>
 
+    <!-- MODAL EDIT -->
     <b-modal id="modal-edit" title="Editar" @ok="handleEdit(editItem)">
       <p class="my-4"></p>
 
-      <form ref="form" >
-        <b-form-group
-          label="Nome"
-        >
-          <b-form-input  v-model="editItem.nome"  disabled></b-form-input>
+      <form ref="form">
+        <b-form-group label="Nome">
+          <b-form-input v-model="editItem.nome"></b-form-input>
         </b-form-group>
 
-        <b-form-group
-          label="Preço"
-        >
-          <b-form-input v-model="editItem.preco" ></b-form-input>
-
+        <b-form-group label="Preço">
+          <b-form-input v-model="editItem.preco"></b-form-input>
         </b-form-group>
       </form>
     </b-modal>
+    <!-- MODAL SAVE -->
+    <b-modal id="modal-save" title="Cadastrar" @ok="handleSave(saveItem)">
+      <p class="my-4"></p>
 
+      <form ref="form">
+        <b-form-group label="Nome">
+          <b-form-input v-model="saveItem.nome"></b-form-input>
+        </b-form-group>
+
+        <b-form-group label="Preço">
+          <b-form-input v-model="saveItem.preco"></b-form-input>
+        </b-form-group>
+      </form>
+    </b-modal>
+    <!-- --------------------- -->
     <div class="container-list">
       <h1>Lista de Produtos</h1>
+
+      <b-button class="title button-title" v-b-modal.modal-save>Adicionar</b-button>
+
       <div class="list-categoria">
         <b-table :items="tableData" :fields="fields" striped responsive="sm" :busy="isBusy">
           <template v-slot:cell(opções)="row">
-            <b-icon class="icon" icon="trash-fill" aria-hidden="true" @click="showModal(row.item)" ></b-icon>
+            <b-icon class="icon" icon="trash-fill" aria-hidden="true" @click="showModal(row.item)"></b-icon>
             <b-icon class="icon" icon="pencil" aria-hidden="true" @click="row.toggleDetails"></b-icon>
           </template>
-    
+
           <template v-slot:row-details="row" v-slot:table-busy>
             <b-card>
               <b-form>
@@ -45,20 +57,12 @@
                 <b-form-group>
                   <b-input v-model="row.item.preco"></b-input>
                 </b-form-group>
-
               </b-form>
               <b-button size="sm" @click="handleEdit(row.item)" variant="primary">Salvar</b-button>
             </b-card>
           </template>
         </b-table>
-        <FormAddCategoria @emit-click="insertListner"/>
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="rows"
-          :per-page="perPage"
-          @change="hadleChange()"
-          aria-controls="my-table"
-        ></b-pagination>
+        <!-- <FormAddCategoria @emit-click="insertListner"/> -->
       </div>
     </div>
   </div>
@@ -66,26 +70,22 @@
 
 <script>
 import Produto from "../services/produto";
-import Navbar from "../components/Navbar";
-import FormAddCategoria from "../components/FormAddCategoria";
+// import FormAddCategoria from "../components/FormAddCategoria";
 import Alert from "../components/utils/Alert";
 
 export default {
   data() {
     return {
-      rows: null,
-      perPage: 10,
-      currentPage: 1,
       tableData: [],
-      fields:
-      ["nome",
-      "preco",
-      "opções"
-      ],
+      fields: ["nome", "preco", "opções"],
       isBusy: false,
       editItem: {
-        nome:"",
-        preco:""
+        nome: "",
+        preco: ""
+      },
+      saveItem: {
+        nome: "",
+        preco: ""
       },
 
       alertBody: {
@@ -100,18 +100,14 @@ export default {
 
   name: "Produto",
   components: {
-    Navbar,
-    FormAddCategoria,
+    // FormAddCategoria,
     Alert
   },
 
   async mounted() {
     try {
       const res = await Produto.getPage();
-      this.rows = res.data.totalPages * 10;
-      this.perPage = res.data.numberOfElements;
-      this.currentPage = res.data.pageable.pageNumber;
-      
+
       if (Object.keys(res.data.content).length != 0) {
         res.data.content.forEach(element => {
           const temp = {
@@ -122,109 +118,82 @@ export default {
           this.tableData.push(temp);
         });
       } else {
-        const temp = {
-          message: "Nenhum produto foi cadastrado",
-          type: "warning"
-        };
-        this.alertBody = temp;
-        this.visible = 5; // tempo para o alerta desaparecer
-
-        setTimeout(function() {
-          this.visible = null;
-        }, 5000);
+        this.showAlert("Nenhum produto foi cadastrado !", "warning", null)
+        
       }
     } catch (e) {
-      const temp = {
-        message: "Erro ao buscar no banco: "+e.message,
-        type: "danger"
-      };
-      this.alertBody = temp;
-      this.visible = 5; // tempo para o alerta desaparecer
-
-      setTimeout(function() {
-        this.visible = null;
-      }, 5000);
+      this.showAlert("Erro ao buscar no banco", "danger", e.message)
     }
   },
   methods: {
-    insertListner(item, flag){
+    // insertListner(item, flag){
 
-      var temp
-      if(flag === 1){
-        temp = {
-          message: "Item inserido com sucesso ! ",
-          type: "primary"
-        };
-      }else if(flag === 2){
-        temp = {
-          message: "Erro ao inserir item: "+ item.message,
-          type: "danger"
-        };
+    //   var temp
+    //   if(flag === 1){
+    //     temp = {
+    //       message: "Item inserido com sucesso ! ",
+    //       type: "primary"
+    //     };
+    //   }else if(flag === 2){
+    //     temp = {
+    //       message: "Erro ao inserir item: "+ item.message,
+    //       type: "danger"
+    //     };
+    //   }
+    //   this.alertBody = temp;
+    //   this.visible = 5;
+    //   setTimeout(function() {
+    //     this.visible = null;
+    //   }, 5000);
+
+    // },
+
+    showAlert(msg, type, error) {
+      const temp = {
+        message: msg,
+        type: type
+      };
+      if (error != null) { 
+        temp.message = temp.message+": "+error
       }
       this.alertBody = temp;
-      this.visible = 5;
-      setTimeout(function() {
-        this.visible = null;
-      }, 5000);
-
+      this.$store.dispatch("setTime", 5);
     },
+
     showModal(item) {
       this.deleteItem = item;
       this.$bvModal.show("modal-delete1");
+    },
+
+    async handleSave() {
+      try {
+        await Produto.post(this.saveItem);
+        this.showAlert("Item cadastrado com sucesso !", "primary", null)
+
+      } catch (e) {
+        this.showAlert("Erro ao cadastrar item", "danger", e.message)
+      }
     },
     async handleDelete() {
       try {
         await Produto.del(this.deleteItem.id);
         const index = this.tableData.indexOf(this.deleteItem);
         this.tableData.splice(index, 1);
-        const temp = {
-          message: "Item deletado com sucesso ! ",
-          type: "primary"
-        };
-        this.alertBody = temp;
-        this.visible = 5;
-        setTimeout(function() {
-          this.visible = null;
-        }, 5000);
+        this.showAlert("Item deletado com sucesso !", "primary", null)
+        
       } catch (e) {
-        const temp = {
-          message: "Erro ao deletar produto " + e.message,
-          type: "danger"
-        };
-        this.alertBody = temp;
-        this.visible = 5;
-        setTimeout(function() {
-          this.visible = null;
-        }, 5000);
+        this.showAlert("Erro ao deletar item", "danger", e.message)
       }
     },
-    
-    async handleEdit(item){
-      try {
-        Produto.put(item.id, item)
-        const temp = {
-          message: "Item alterado com sucesso ! ",
-          type: "primary"
-        };
-        this.alertBody = temp;
-        this.visible = 5;
-        setTimeout(function() {
-          this.visible = null;
-        }, 5000);
 
+    async handleEdit(item) {
+      try {
+        Produto.put(item.id, item);
+        this.showAlert("Item alterado com sucesso", "primary", null)
+    
+      } catch (e) {
+        this.showAlert("Erro ao alterar item", "danger", e.message)
       }
-      catch(e){
-        const temp = {
-          message: "Erro ao alterar item",
-          type: "danger"
-        };
-        this.alertBody = temp;
-        this.visible = 5;
-        setTimeout(function() {
-          this.visible = null;
-        }, 5000);
-      }
-      
     }
   }
 };
