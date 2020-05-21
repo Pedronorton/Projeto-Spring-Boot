@@ -1,10 +1,10 @@
 <template>
   <div>
     <b-alert
-      :show="visible"
+      :show="time"
       dismissible
-      fade
       :variant="type"
+      @dismissed="setTime(0)" 
       @dismiss-count-down="countDownChanged"
     >
     {{message}}</b-alert>
@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import {mapState ,mapActions} from 'vuex'
 export default {
   name: "Alert",
   props: {
@@ -21,13 +22,22 @@ export default {
   },
   data() {
     return {
-      dismissCountDown: 0,
     };
   },
+  computed:{
+    ...mapState({
+      time: state => state.time
+    })
+  },
   methods: {
-    countDownChanged(dismissCountDown) { 
-      this.dismissCountDown = dismissCountDown;
+    ...mapActions([
+      'changeValue',
+      'setTime'
+    ]),
+    countDownChanged(val) { 
+      this.$store.dispatch('setTime', val)
     },
-  }
+    
+  },
 };
 </script>
