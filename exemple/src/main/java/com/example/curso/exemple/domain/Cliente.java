@@ -1,16 +1,19 @@
 package com.example.curso.exemple.domain;
 
+import com.example.curso.exemple.enums.Perfil;
 import com.example.curso.exemple.enums.TipoCliente;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Cliente implements Serializable {
@@ -24,6 +27,13 @@ public class Cliente implements Serializable {
     private String email;
     private String cpfOuCnpj;
     private Integer tipo;
+    @NotEmpty
+    private String senha;
+
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name="PERFIS")
+    private Set<Integer> perfis = new HashSet<>();
 
     @ElementCollection
     @CollectionTable(name = "TELEFONE")
@@ -37,14 +47,17 @@ public class Cliente implements Serializable {
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos = new ArrayList<>();
 
-    public Cliente(String nome, String email, String cpfOuCnpj, TipoCliente tipo){
+    public Cliente(String nome, String email, String cpfOuCnpj, TipoCliente tipo, String senha){
         this.nome = nome;
         this.email = email;
         this.cpfOuCnpj = cpfOuCnpj;
         this.tipo = (tipo==null) ? null : tipo.getCod();
+        this.senha = senha;
+        addPerfil(Perfil.CLIENTE);
+
     }
     public Cliente(){
-
+        addPerfil(Perfil.CLIENTE);
     }
 
     public Integer getId() {
@@ -69,6 +82,14 @@ public class Cliente implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Set<Perfil> getPerfis(){
+        return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+    }
+
+    public void addPerfil(Perfil perfil){
+        perfis.add(perfil.getCod());
     }
 
     public String getCpfOuCnpj() {
