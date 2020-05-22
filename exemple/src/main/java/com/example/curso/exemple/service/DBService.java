@@ -107,7 +107,7 @@ public class DBService {
         cli1.getTelefones().addAll(Arrays.asList("3333","5555"));
 
         Cliente cli2 = new Cliente("Maria Silva","pedro.paiva.pdo@gmail.com","1111", TipoCliente.PESSOAFISICA, pe.encode("123"));
-        cli1.getTelefones().addAll(Arrays.asList("3333","5555"));
+        cli2.getTelefones().addAll(Arrays.asList("3333","5555"));
         cli2.addPerfil(Perfil.ADMIN);
 
         Endereco e1 = new Endereco("Rua flores","33","casa","centro", "37490000", cli1, c1);
