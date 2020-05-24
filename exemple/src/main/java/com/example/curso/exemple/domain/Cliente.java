@@ -27,8 +27,6 @@ public class Cliente implements Serializable {
     private String email;
     private String cpfOuCnpj;
     private Integer tipo;
-    @NotEmpty
-    private String senha;
 
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -54,7 +52,6 @@ public class Cliente implements Serializable {
     public Cliente(String nome, String email, String cpfOuCnpj, TipoCliente tipo, String senha){
         this.nome = nome;
         this.email = email;
-        this.senha = senha;
         this.cpfOuCnpj = cpfOuCnpj;
         this.tipo = (tipo==null) ? null : tipo.getCod();
         this.senha = senha;
