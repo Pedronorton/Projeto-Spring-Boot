@@ -34,6 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JWTUtil jwtUtil;
 
+    //ROTAS PARA ACESSO SEM ESTAR LOGADO
     private static final String[] PUBLIC_MATCHERS = {
             "/h2-console/**"
     };
@@ -42,7 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/categoria/**",
     };
     private static final String[] PUBLIC_MATCHERS_POST = {
-            "/clientes/**"
+            "/clientes/**",
+            "/auth/forgot/**"
     };
 
     @Override
