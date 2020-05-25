@@ -6,6 +6,8 @@ import com.example.curso.exemple.domain.PagamentoBoleto;
 import com.example.curso.exemple.domain.Pedido;
 import com.example.curso.exemple.enums.EstadoPagamento;
 import com.example.curso.exemple.repositories.*;
+import com.example.curso.exemple.security.UserSS;
+import com.example.curso.exemple.service.exception.AuthorizationException;
 import com.example.curso.exemple.service.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +42,9 @@ public class PedidoService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private ClienteService clienteService;
+
     public Pedido buscar(Integer id){
         Optional<Pedido> obj = repo.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado | id: "+ id + "tipo: "+Pedido.class.getName()));
@@ -50,7 +55,17 @@ public class PedidoService {
         return obj;
     }
 
+    public List<Pedido> getByCliente(){
+        UserSS user = UserService.authenticated();
+        if(user == null){
+            throw new AuthorizationException("Acesso negado");
+        }
+        Cliente cli = clienteService.buscar(user.getId());
+        List<Pedido> list = repo.findByCliente(cli);
+        return list;
 
+
+    }
 
     @Transactional
     public Pedido insert(Pedido obj){

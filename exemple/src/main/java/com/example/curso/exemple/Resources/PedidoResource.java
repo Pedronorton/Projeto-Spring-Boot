@@ -22,7 +22,7 @@ public class PedidoResource {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<?> getAll(){
 
-        List<Pedido> list = service.getAll();
+        List<Pedido> list = service.getByCliente();
 
         return ResponseEntity.ok().body(list);
     }
