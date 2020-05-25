@@ -7,10 +7,13 @@ import com.example.curso.exemple.domain.*;
 import com.example.curso.exemple.domain.Cliente;
 import com.example.curso.exemple.dto.ClienteDTO;
 import com.example.curso.exemple.dto.ClienteNewDTO;
+import com.example.curso.exemple.enums.Perfil;
 import com.example.curso.exemple.enums.TipoCliente;
 import com.example.curso.exemple.repositories.CidadeRepository;
 import com.example.curso.exemple.repositories.ClienteRepository;
 import com.example.curso.exemple.repositories.EnderecoRepository;
+import com.example.curso.exemple.security.UserSS;
+import com.example.curso.exemple.service.exception.AuthorizationException;
 import com.example.curso.exemple.service.exception.DataIntegrityException;
 import com.example.curso.exemple.service.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +47,13 @@ public class ClienteService {
 
 
     public Cliente buscar (Integer id){
+
+        UserSS user = UserService.authenticated(); // retorna o usuário autenticado
+
+        if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())){
+            throw new AuthorizationException("Acesso negado");
+        }
+
         Optional<Cliente> obj = repo.findById(id);
 
         return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado| Id: "+ id+", Tipo: "+Cliente.class.getName()));
