@@ -3,6 +3,7 @@ package com.example.curso.exemple.service;
 //ONDE IRÁ TER AS OPERAÇÕES DE CONSULTA NO DB
 
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.example.curso.exemple.domain.*;
 import com.example.curso.exemple.domain.Cliente;
 import com.example.curso.exemple.dto.ClienteDTO;
@@ -24,8 +25,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -45,6 +50,8 @@ public class ClienteService {
     @Autowired
     private EnderecoRepository enderecoRepository;
 
+    @Autowired
+    private S3Service s3Service;
 
     public Cliente buscar (Integer id){
 
@@ -121,6 +128,10 @@ public class ClienteService {
         }
 
         return cli;
+    }
+
+    public URI uploadFilePicture(MultipartFile multipartFile) throws IOException, URISyntaxException {
+        return s3Service.uploadFile(multipartFile);
     }
 
 }
