@@ -18,6 +18,7 @@ import com.example.curso.exemple.service.exception.AuthorizationException;
 import com.example.curso.exemple.service.exception.DataIntegrityException;
 import com.example.curso.exemple.service.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.URI;
@@ -52,6 +54,12 @@ public class ClienteService {
 
     @Autowired
     private S3Service s3Service;
+
+    @Autowired
+    private ImageService imageService;
+
+    @Value("${img.prefix.client.profile}")
+    private String prefix;
 
     public Cliente buscar (Integer id){
 
@@ -131,7 +139,23 @@ public class ClienteService {
     }
 
     public URI uploadFilePicture(MultipartFile multipartFile) throws IOException, URISyntaxException {
-        return s3Service.uploadFile(multipartFile);
+
+        UserSS user = UserService.authenticated();
+        if(user == null){
+            throw new RuntimeException("Cliente inexistente");
+        }
+
+        BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+        String fileName = prefix+ user.getId() + "jpg";
+
+        URI uri = s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
+
+        Optional<Cliente> cli = repo.findById(user.getId());
+
+        cli.get().setImageUrl(uri.toString());
+
+        repo.save(cli.get());
+        return uri;
     }
 
 }
