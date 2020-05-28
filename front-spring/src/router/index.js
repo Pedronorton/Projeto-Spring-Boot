@@ -9,15 +9,29 @@ import AddCategoria from '../components/AdicionarCategoria'
 import FormPedidos from '../components/FormPedidos'
 import Pedido from "../components/Pedido"
 import AdminRouter from "../components/AdminRouter"
+import Login from "../components/Login"
+import Auth from "../services/Auth"
 Vue.use(Router)
 
 export default new Router({
   mode: 'history',
   routes: [
     {
+      path: '/login',
+      name: 'Login',
+      component: Login,
+    },
+    {
       path:"",
       name:"AdminRouter",
       component:AdminRouter , 
+      async beforeEnter(to, from, next) {
+        if(await Auth.isValidToken() == true){
+          next()
+        }else{
+          next("/login")
+        }
+      },
     children:
     [
     {
