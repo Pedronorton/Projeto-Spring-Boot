@@ -105,6 +105,7 @@ export default {
       this.isBusy = true;
       const res = await Clientes.getAll();
       
+      this.img = res.data[1].imageUrl;
       if (Object.keys(res.data).length != 0) {
         res.data.forEach(element => {
           const temp = {
@@ -114,7 +115,8 @@ export default {
             cpfOuCnpj: element.cpfOuCnpj,
             telefone: element.telefones[0],
             logradouro: element.enderecos[0].logradouro,
-            cep: element.enderecos[0].cep
+            cep: element.enderecos[0].cep,
+            img: element.imageUrl
           };
           this.tableData.push(temp);
         });
