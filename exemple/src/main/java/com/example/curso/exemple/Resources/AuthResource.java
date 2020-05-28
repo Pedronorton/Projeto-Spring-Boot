@@ -22,12 +22,15 @@ public class AuthResource {
     @Autowired
     private AuthService service;
 
+
     /*@RequestMapping(value = "/refresh_token", method = RequestMethod.POST)
     public ResponseEntity<Void> refreshToken(HttpServletResponse response){
         UserSS user = UserService.authenticated();
         String token = jwtUtil.generateToken(user.getUsername());
         response.addHeader("Authorization", "Bearer "+token);
         return ResponseEntity.noContent().build();
+        res.addHeader("access-control-expose-headers", "Authorization");
+
     }*/
 
     @RequestMapping(value = "/forgot", method = RequestMethod.POST)
@@ -35,6 +38,19 @@ public class AuthResource {
         service.sendNewPassword(objDTO.getEmail());
         return ResponseEntity.noContent().build();
     }
+
+    /*@RequestMapping(value = "/validateToken", method = RequestMethod.POST)
+    public ResponseEntity validToken(@RequestBody String token){
+
+        return ResponseEntity.ok().body(jwtUtil.tokenValido(token));
+    }*/
+
+    @RequestMapping(value = "/validateToken", method = RequestMethod.POST)
+    public ResponseEntity validToken(@RequestParam(value = "token") String token){
+
+        return ResponseEntity.ok().body(jwtUtil.tokenValido(token));
+    }
+
 
 
 

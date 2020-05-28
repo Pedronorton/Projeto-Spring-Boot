@@ -5,8 +5,10 @@ import com.example.curso.exemple.domain.Cliente;
 import com.example.curso.exemple.domain.Cliente;
 import com.example.curso.exemple.dto.ClienteDTO;
 import com.example.curso.exemple.dto.ClienteNewDTO;
+import com.example.curso.exemple.security.UserSS;
 import com.example.curso.exemple.service.ClienteService;
 import com.example.curso.exemple.service.ClienteService;
+import com.example.curso.exemple.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,7 @@ public class ClienteResource {
 
     @Autowired
     private ClienteService service;
+
     /*
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> find(@PathVariable Integer id){ // O PATHVARIABLE SIGNIFICA QUE O ENDPOINT QUE É O /ID IRÁ PARA A VARIAVEL INTEGER ID
@@ -55,7 +58,15 @@ public class ClienteResource {
         return ResponseEntity.ok().body(obj.getId());
         //return ResponseEntity.created(uri).build();
     }
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @RequestMapping(value = "/autenticated",method = RequestMethod.GET)
+    public ResponseEntity<?> getAutenticated(){
+        UserSS user = UserService.authenticated();
+        Cliente cli = service.buscar(user.getId());
+
+        return ResponseEntity.ok().body(cli);
+
+    }
+
     @RequestMapping(method = RequestMethod.GET)
    public ResponseEntity<?> findAll(){
        List<Cliente> obj = service.findAll();
@@ -71,14 +82,14 @@ public class ClienteResource {
 
         return ResponseEntity.noContent().build();
     }
-    @PreAuthorize("hasAnyRole('ADMIN')")
+
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable Integer id){
         service.delete(id);
 
         return ResponseEntity.noContent().build();
     }
-    @PreAuthorize("hasAnyRole('ADMIN')")
+
     @RequestMapping(value = "/page", method = RequestMethod.GET)
     public ResponseEntity<?> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                      @RequestParam(value = "linesPerPage", defaultValue = "2")Integer linesPerPage,
