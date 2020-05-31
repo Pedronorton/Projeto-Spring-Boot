@@ -1,0 +1,114 @@
+<template>
+    <nav class="menu">
+        <ul>
+            <li class="item-nav" v-for="(item,index) in items" :key="index" @click="filterByCategoria(item.id), boldItem(index)">
+                {{item.nome}}
+            </li>
+
+        </ul>
+    </nav>
+</template>
+
+<script>
+import Categoria from "../services/categoria"
+import Produto from "../services/produto"
+export default {
+    name: 'FiltroProdutos',
+    components:{
+    },
+    data(){
+        return{
+            items:[
+                {id:0,
+                nome: "Todos"
+                }
+            ],
+            lastIndexBoldItem: null
+            
+        }
+    },
+    async mounted(){
+        
+        try{
+            const res = await Categoria.getAll()
+            const ids = []
+            if(Object.keys(res.data) != 0){
+                res.data.forEach(element => {
+                    const temp = {
+                        id: element.id,
+                        nome: element.nome
+                        
+                    }
+                    ids.push(temp.id)
+                    this.items.push(temp)
+                });
+            }
+            
+            this.items[0].id = ids
+            
+        }
+        catch(e){
+            alert(e)
+        }
+    },
+    methods: {
+        async filterByCategoria(id){
+            try{
+                const res = await Produto.getPage(id)
+                this.$store.state.tableDataProdutos = []
+                
+                if(Object.keys(res.data.content) != 0){
+                    res.data.content.forEach(element =>{
+                        this.$store.state.tableDataProdutos.push({id: element.id, nome: element.nome, preco: element.preco})
+                    })
+                }
+                
+            }
+            catch(e){
+                alert(e)
+            }
+        },
+        boldItem(index){
+            const item = document.getElementsByClassName("item-nav")
+            
+            if(this.lastIndexBoldItem != null){
+                item[this.lastIndexBoldItem].style.fontWeight = "normal"
+            }
+            this.lastIndexBoldItem = index
+            item[index].style.fontWeight = "bold"
+        }
+    }
+
+}
+</script>
+
+<style scoped>
+
+.item-nav{
+    display: inline;
+    margin-right: 15px;
+    cursor: pointer;
+}
+.item-nav:hover{
+    position: relative;
+}
+.item-nav:hover::after{
+    content: "";
+    background-color: blue;
+    width: 50%;
+    height: 20%;
+    position: absolute;
+    top: 60% ;
+    left: 5% ;
+    z-index: 0;
+}
+.item-nav:hover{
+    
+}
+.menu{
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
