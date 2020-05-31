@@ -53,20 +53,20 @@ public class ProdutoResource {
         return ResponseEntity.noContent().build();
     }
 
+
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Page<ProdutoDTO>> findAll(
             //@RequestParam(value = "nome", defaultValue = "") String nome,
-            //@RequestParam(value = "categorias", defaultValue = "0") String categorias,
+            @RequestParam(value = "categorias", defaultValue = "0") String categorias,
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "linesPerPage", defaultValue = "100")Integer linesPerPage,
             @RequestParam(value = "orderBy", defaultValue = "nome")String orderBy,
             @RequestParam(value = "direction", defaultValue = "ASC")String direction){
 
-        //List<Integer> ids = URL.decodeIntList(categorias);
-
+        List<Integer> ids = URL.decodeIntList(categorias);
 
         //String nomeDecode = URL.decodeParam(nome);
-        Page<Produto> list = service.search(page,linesPerPage,orderBy,direction);
+        Page<Produto> list = service.search(ids,page,linesPerPage,orderBy,direction);
         Page<ProdutoDTO> listDTO = list.map(obj -> new ProdutoDTO(obj));
         return ResponseEntity.ok().body(listDTO);
     }

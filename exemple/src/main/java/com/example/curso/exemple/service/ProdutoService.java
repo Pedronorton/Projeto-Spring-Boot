@@ -16,8 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProdutoService {
@@ -38,13 +37,30 @@ public class ProdutoService {
 
         return obj;
     }
-    public Page<Produto> search(Integer pager, Integer linesPerPage, String orderBy, String direction){
+
+    public List<Produto> teste(List<Integer> ids){
+
+        //List<Produto> list = repo.search();
+        List<Produto> list = new ArrayList<>();
+        return list;
+    }
+
+
+    /*public Page<Produto> search(    Integer pager, Integer linesPerPage, String orderBy, String direction){
 
         PageRequest pageRequest = PageRequest.of(pager, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
 
         List<Categoria> categorias = categoriaRepository.findAll();
         return repo.findAll(pageRequest);
+    }*/
+    public Page<Produto> search( List<Integer> ids, Integer pager, Integer linesPerPage, String orderBy, String direction){
+
+        PageRequest pageRequest = PageRequest.of(pager, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+
+        List<Categoria> categorias = categoriaRepository.findAllById(ids);
+        return repo.search(categorias,pageRequest);
     }
+
 
     public void delete(Integer id) {
 
