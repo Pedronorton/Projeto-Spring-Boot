@@ -9,7 +9,8 @@ export default new Vuex.Store({
     state: {
       time: 0,
       auth:"",
-      isLoading: false
+      isLoading: false,
+      tableDataProdutos:[]
     },
     mutations: {
       setTime(state, value){
@@ -26,10 +27,16 @@ export default new Vuex.Store({
         }else{
           state.isLoading = true
         }
-      }
-
+      },
+      setObjToTableDataProdutos(state, obj){
+        state.tableDataProdutos.push(obj)
+      },
+      
     },
     getters: {
+      getTableDataProdutos(state){
+        return state.tableDataProdutos;
+      }
     },
     actions: { 
       setTime(context, value){
@@ -40,6 +47,12 @@ export default new Vuex.Store({
       },
       changeLoading(context){
         context.commit('changeLoading')
+      },
+      getTableDataProdutos(context){
+        context.commit('getTableDataProdutos')
+      },
+      setObjToTableDataProdutos(context){
+        context.commit('setObjToTableDataProdutos')
       }
     },
     modules: {}

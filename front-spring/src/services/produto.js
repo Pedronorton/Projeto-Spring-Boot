@@ -1,8 +1,10 @@
 import Api from './config'
 
 
-const getPage = () => {
-    return Api().get('/produtos')
+const getPage = (ids) => {
+    
+
+    return Api().get(`/produtos?categorias=${ids}`)
 }
 
 const post = (data) => {
@@ -16,7 +18,6 @@ const del = (id) => {
 const put = (id,data) => {
     return Api().put(`/produtos/${id}`, data)
 }
-
 
 export default {
     getPage,
