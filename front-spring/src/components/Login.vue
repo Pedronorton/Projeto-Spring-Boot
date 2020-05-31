@@ -68,7 +68,7 @@ export default {
         const res =  await login.post(this.login);
 
         this.$store.dispatch("setAuthLocalStorage", res.data);
-        this.$router.push("/");
+        this.$router.push("/admin");
         
         } catch (e) {
 

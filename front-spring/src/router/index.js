@@ -11,6 +11,7 @@ import Pedido from "../components/Pedido"
 import AdminRouter from "../components/AdminRouter"
 import Login from "../components/Login"
 import Auth from "../services/Auth"
+import HomeUser from "../views/HomeUser"
 Vue.use(Router)
 
 export default new Router({
@@ -21,6 +22,12 @@ export default new Router({
       name: 'Login',
       component: Login,
     },
+    {
+      path: '/',
+      name: 'HomeUser',
+      component: HomeUser,
+    },
+
     {
       path:"",
       name:"AdminRouter",
@@ -34,8 +41,8 @@ export default new Router({
       },
     children:
     [
-    {
-      path: '/',
+    { 
+      path:"/admin",
       name: 'Home',
       component: Home,
       

@@ -38,7 +38,7 @@ export default {
       {
         id:'',
         title:'Home',
-        route:'/',
+        route:'/admin',
         icon:"house-door-fill",
 
       },
