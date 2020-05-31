@@ -1,7 +1,7 @@
 <template>
   <div>
     <Alert class="alerta" message="alertBody.message" type="alertBody.type" :visible="visible" />
-    <b-modal id="modal-save" title="Alterar imagem" @ok="handleSave()">
+    <b-modal id="modal-user-picture" title="Alterar imagem" @ok="handleSave()">
       <div>
         <b-form>
           <b-form-group>
@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     editImage() {
-      this.$bvModal.show("modal-save");
+      this.$bvModal.show("modal-user-picture");
     },
     async handleSave() {
       try {

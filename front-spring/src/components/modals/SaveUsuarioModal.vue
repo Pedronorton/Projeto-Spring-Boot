@@ -99,6 +99,7 @@ export default {
       saveItem: {
         nome: "",
         cpfOuCnpj: "",
+        senha:"123",
         email: "",
         tipo: null,
         telefone1: "",
@@ -108,6 +109,7 @@ export default {
         cidade_id: ""
       },
       cidade_nome: "",
+      file: null,
 
       selectedCity: "",
       tableDataCidade: [],
@@ -142,10 +144,10 @@ export default {
 
         this.saveItem.cidade_id = res.data.id
         this.saveItem.tipo = this.selectedCity
-        
+
         const response = await Clientes.post(this.saveItem);
         this.$emit("emit-click", this.saveItem, response.data);
-        
+
       }
       catch(e){
         this.$emit("emit-click", e, null);
