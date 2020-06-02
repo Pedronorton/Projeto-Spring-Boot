@@ -2,7 +2,9 @@ package com.example.curso.exemple.service;
 
 
 import com.example.curso.exemple.domain.Cliente;
+import com.example.curso.exemple.enums.Perfil;
 import com.example.curso.exemple.repositories.ClienteRepository;
+import com.example.curso.exemple.security.UserSS;
 import com.example.curso.exemple.service.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -58,6 +60,15 @@ public class AuthService {
             return (char) (rand.nextInt(26) + 65);
         }else{
             return (char) (rand.nextInt(26) + 97);
+        }
+    }
+
+    public Boolean isAdmin(){
+        UserSS user = UserService.authenticated();
+        if(user.hasRole(Perfil.ADMIN)){
+            return true;
+        }else{
+            return false;
         }
     }
 

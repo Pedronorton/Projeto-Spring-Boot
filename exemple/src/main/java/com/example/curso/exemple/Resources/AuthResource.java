@@ -51,6 +51,14 @@ public class AuthResource {
         return ResponseEntity.ok().body(jwtUtil.tokenValido(token));
     }
 
+    @RequestMapping(value = "/checkUser", method = RequestMethod.GET)
+    public ResponseEntity isAdmin(){
+
+        return ResponseEntity.ok().body(service.isAdmin());
+    }
+
+
+
 
 
 
