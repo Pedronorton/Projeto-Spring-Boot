@@ -5,6 +5,7 @@ import com.example.curso.exemple.domain.ItemPedido;
 import com.example.curso.exemple.domain.PagamentoBoleto;
 import com.example.curso.exemple.domain.Pedido;
 import com.example.curso.exemple.enums.EstadoPagamento;
+import com.example.curso.exemple.enums.Perfil;
 import com.example.curso.exemple.repositories.*;
 import com.example.curso.exemple.security.UserSS;
 import com.example.curso.exemple.service.exception.AuthorizationException;
@@ -60,10 +61,17 @@ public class PedidoService {
         if(user == null){
             throw new AuthorizationException("Acesso negado");
         }
-        Cliente cli = clienteService.buscar(user.getId());
-        List<Pedido> list = repo.findByCliente(cli);
-        return list;
+        if(user.hasRole(Perfil.ADMIN)){
+            List<Pedido> list = repo.findAll();
+            return list;
 
+        }else if(user.hasRole(Perfil.CLIENTE)){
+            Cliente cli = clienteService.buscar(user.getId());
+            List<Pedido> list = repo.findByCliente(cli);
+            return list;
+        }else{
+            return null;
+        }
 
     }
 
