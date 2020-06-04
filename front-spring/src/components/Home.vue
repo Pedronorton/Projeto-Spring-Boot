@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex"
 // import Sidebar from './Sidebar'
 // import Navbar from "../components/Navbar";
 import CardAdmin from "../components/CardAdmin";
@@ -60,26 +61,66 @@ export default {
           icon: "file-earmark-text",
           contentNumber:null
         },
-        
-      ]
+      ],
+      
     };
   },
 
+  computed:{
+    ...mapGetters({
+      idsCategoria: 'getAllIdsCategorias'
+    })
+
+  },
+
   async mounted(){
+
     try{
-      const res = await Cliente.getAll();
-      const res1 = await Produto.getPage();
-      const res2 = await Categoria.getAll();
-      const res3 = await Pedido.getAll();
-      
-      
-      this.items[0].contentNumber = Object.keys(res.data).length
-      this.items[1].contentNumber = Object.keys(res1.data).length
-      this.items[2].contentNumber = Object.keys(res2.data).length
-      this.items[3].contentNumber = Object.keys(res3.data).length
+      const reponseCliente = await Cliente.getAll();
+      this.items[0].contentNumber = Object.keys(reponseCliente.data).length
     }
     catch(e){
-      alert(e)
+      alert(e+ "cliente")
+    }
+
+    try{
+      const responseCategoria = await Categoria.getAll();
+      this.items[2].contentNumber = Object.keys(responseCategoria.data).length
+      this.insertAllIdsCategoria(responseCategoria)
+    }
+    catch(e){
+      alert(e+ "categoria")
+    }
+
+    
+    try{
+      const responsePedido = await Pedido.getAll();
+      this.items[3].contentNumber = Object.keys(responsePedido.data).length
+    }
+    catch(e){
+      alert(e+" Pedido")
+    }
+
+    try{
+      const ids = []
+      this.idsCategoria.forEach(element => {
+        ids.push(element.id)  
+      })
+      
+      const responseProduto = await Produto.getPage(ids.toString());
+      this.items[1].contentNumber = Object.keys(responseProduto.data).length
+
+    }
+    catch(e){
+      alert(e+" Produto")
+    }
+  },
+
+  methods: {
+    insertAllIdsCategoria(response){
+      response.data.forEach(element => {
+        this.$store.state.allIdsCategorias.push({id: element.id})
+      });
     }
   }
 
@@ -88,6 +129,9 @@ export default {
 </script>
 
 <style scoped>
+.teste{
+  background-color: blue;
+}
 .max-width{
   display: flex;
   justify-content: center;
