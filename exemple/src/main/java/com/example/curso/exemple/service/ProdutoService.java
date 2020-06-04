@@ -92,6 +92,14 @@ public class ProdutoService {
 
     }
 
+    public Produto updateCategoria(Integer id, Categoria cat){
+        Produto newObj = buscar(id);
+        newObj.getCategorias().addAll(Arrays.asList(cat));
+        cat.getProdutos().addAll(Arrays.asList(newObj));
+        return repo.save(newObj);
+
+    }
+
     public void updateData(Produto newObj, Produto obj){ // possível apenas mudar o preço
         newObj.setPreco(obj.getPreco());
     }

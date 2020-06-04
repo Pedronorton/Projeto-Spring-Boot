@@ -49,8 +49,16 @@ public class ProdutoResource {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody Produto obj){
-        
+
         obj = service.update(obj);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @RequestMapping(value = "/categoria/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<?> updateCategoria(@PathVariable Integer id, @RequestBody Categoria cat){
+
+        Produto obj = service.updateCategoria(id, cat);
 
         return ResponseEntity.noContent().build();
     }
