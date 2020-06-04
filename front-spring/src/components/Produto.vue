@@ -30,7 +30,17 @@
                 <b-form-group>
                   <b-input v-model="row.item.preco"></b-input>
                 </b-form-group>
+
+                <b-form-group class="row">
+                  <label for="inputEmail3" class="col-sm-2 col-form-label"></label>
+                  <div class="col-sm-10">
+                    <b-form-group label="Categoria">
+                      <b-form-select v-model="selectedCategoria" :options="tableDataCategoria"></b-form-select>
+                    </b-form-group>
+                  </div>
+                </b-form-group>
               </b-form>
+
               <b-button size="sm" @click="handleEdit(row.item)" variant="primary">Salvar</b-button>
             </b-card>
           </template>
@@ -41,14 +51,17 @@
 </template>
 
 <script>
+import Categoria from "../services/categoria";
+import { mapState, mapGetters } from "vuex";
 import Produto from "../services/produto";
-import SaveProdutoModal from "./modals/SaveProdutoModal"
+import SaveProdutoModal from "./modals/SaveProdutoModal";
 import Alert from "../components/utils/Alert";
 
 export default {
   data() {
     return {
       tableData: [],
+      tableDataCategoria: [],
       fields: ["nome", "preco", "opções"],
       isBusy: false,
       editItem: {
@@ -66,7 +79,8 @@ export default {
       },
       visible: null,
 
-      deleteItem: null
+      deleteItem: null,
+      selectedCategoria: ""
     };
   },
 
@@ -75,10 +89,23 @@ export default {
     SaveProdutoModal,
     Alert
   },
+  computed: {
+    ...mapState({
+      tableDataProdutos: state => state.tableDataProdutos
+    }),
+    ...mapGetters({
+      listIdsCategorias: "getAllIdsCategorias"
+    })
+  },
 
   async mounted() {
     try {
-      const res = await Produto.getPage();
+      const ids = [];
+      this.listIdsCategorias.forEach(element => {
+        ids.push(element.id);
+      });
+
+      const res = await Produto.getPage(ids.toString());
 
       if (Object.keys(res.data.content).length != 0) {
         res.data.content.forEach(element => {
@@ -90,25 +117,36 @@ export default {
           this.tableData.push(temp);
         });
       } else {
-        this.showAlert("Nenhum produto foi cadastrado !", "warning", null)
-        
+        this.showAlert("Nenhum produto foi cadastrado !", "warning", null);
       }
     } catch (e) {
-      this.showAlert("Erro ao buscar no banco", "danger", e.message)
+      this.showAlert("Erro ao buscar no banco", "danger", e.message);
+    }
+    try {
+      const responseCategoria = await Categoria.getAll();
+      responseCategoria.data.forEach(element => {
+        const temp = {
+          text: element.nome,
+          value: element
+        };
+        this.tableDataCategoria.push(temp);
+      });
+    } catch (e) {
+      alert(e);
     }
   },
   methods: {
-    insertListner(item, response){
-      if(response != null){
-        this.showAlert("Item cadastrado com sucesso ! ", "primary", null)
+    insertListner(item, response) {
+      if (response != null) {
+        this.showAlert("Item cadastrado com sucesso ! ", "primary", null);
         const temp = {
           id: response,
           nome: item.nome,
           preco: item.preco
-        }
-        this.tableData.push(temp)
-      }else{
-        this.showAlert("Erro ao deletar item", "danger", item.message)
+        };
+        this.tableData.push(temp);
+      } else {
+        this.showAlert("Erro ao deletar item", "danger", item.message);
       }
     },
 
@@ -117,8 +155,8 @@ export default {
         message: msg,
         type: type
       };
-      if (error != null) { 
-        temp.message = temp.message+": "+error
+      if (error != null) {
+        temp.message = temp.message + ": " + error;
       }
       this.alertBody = temp;
       this.$store.dispatch("setTime", 5);
@@ -134,20 +172,24 @@ export default {
         await Produto.del(this.deleteItem.id);
         const index = this.tableData.indexOf(this.deleteItem);
         this.tableData.splice(index, 1);
-        this.showAlert("Item deletado com sucesso !", "primary", null)
-        
+        this.showAlert("Item deletado com sucesso !", "primary", null);
       } catch (e) {
-        this.showAlert("Erro ao deletar item", "danger", e.message)
+        this.showAlert("Erro ao deletar item", "danger", e.message);
       }
     },
 
     async handleEdit(item) {
+      console.log(this.selectedCategoria.id);
+
       try {
-        Produto.put(item.id, item);
-        this.showAlert("Item alterado com sucesso", "primary", null)
-    
+        Produto.put(item);
+        const temp = {
+          id: this.selectedCategoria.id
+        }
+        Produto.putCategoria(item.id, temp)
+        this.showAlert("Item alterado com sucesso", "primary", null);
       } catch (e) {
-        this.showAlert("Erro ao alterar item", "danger", e.message)
+        this.showAlert("Erro ao alterar item", "danger", e.message);
       }
     }
   }
