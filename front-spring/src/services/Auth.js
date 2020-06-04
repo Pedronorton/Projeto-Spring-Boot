@@ -1,5 +1,19 @@
 import Api from './config'
 
+const getUser = () => {
+
+    let token = localStorage.getItem('token')
+    
+
+    const config = {
+        headers: {
+            Authorization: "Bearer "+token
+        }
+    }
+
+    return Api().get("auth/user", config)
+}
+
 export default {
 
     async isValidToken() {
@@ -13,4 +27,5 @@ export default {
         
         return res.data
     },
+    getUser,
 }
