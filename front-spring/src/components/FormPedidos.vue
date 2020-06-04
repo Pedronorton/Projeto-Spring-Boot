@@ -69,8 +69,8 @@ export default {
                     numeroDeParcelas : 10,
                     type: "PagamentoCartao"
                 },
-        itens: []
-      },
+              itens: []
+            },
       selectedCliente: "",
       selectedItem: [],
       selectedEndereco: ""
@@ -95,9 +95,8 @@ export default {
 
       return aux.filter(opt =>
 
-          this.value.indexOf(opt) === -1
-
-      ) // deleta ele da lista
+          this.value.indexOf(opt) === -1 // deleta ele da lista
+      ) 
     }
   },
 
@@ -122,12 +121,10 @@ export default {
   },
 
   async mounted() {
-    try {
-      const res = await Cliente.getAll();
-      const res1 = await Produto.getPage();
-
-      if (Object.keys(res) != 0) {
-        res.data.forEach(element => {
+    try{
+      const resposeCliente = await Cliente.getAll();
+      if (Object.keys(resposeCliente) != 0) {
+        resposeCliente.data.forEach(element => {
           const temp = {
             text: element.nome,
             value: element
@@ -136,9 +133,16 @@ export default {
           this.tableDataCliente.push(temp);
         });
       }
+      
+    }
+    catch(e){
+      alert(e)
+    }
+    try {
+      const responseProduto = await Produto.getAll();
 
-      if (Object.keys(res1) != 0) {
-        res1.data.content.forEach(element => {
+      if (Object.keys(responseProduto) != 0) {
+        responseProduto.data.content.forEach(element => {
           const temp1 = {
             text: element.nome,
             value: element
@@ -154,7 +158,7 @@ export default {
   methods: {
 
     handleSave() {
-      this.tableData.cliente = this.selectedCliente;
+      this.tableData.cliente.id = this.selectedCliente.id;
       this.tableData.enderecoEntrega = this.selectedEndereco;
       this.selectedItem.forEach(element => {
           const temp = {
@@ -167,14 +171,14 @@ export default {
       };
           this.tableData.itens.push(temp);
       })
-
       try {
+        
         Pedido.post(this.tableData);
         this.resetForm()
-
-      } catch (e) {
-        alert(e);
       }
+        catch(e){
+            alert(e.message)
+        }
     },
     resetForm(){
         this.selectedCliente = ""
