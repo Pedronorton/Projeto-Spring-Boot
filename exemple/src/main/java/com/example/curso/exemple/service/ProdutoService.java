@@ -6,6 +6,7 @@ import com.example.curso.exemple.domain.Produto;
 import com.example.curso.exemple.repositories.CategoriaRepository;
 import com.example.curso.exemple.repositories.PedidoRepository;
 import com.example.curso.exemple.repositories.ProdutoRepository;
+import com.example.curso.exemple.security.UserSS;
 import com.example.curso.exemple.service.exception.DataIntegrityException;
 import com.example.curso.exemple.service.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,9 +62,15 @@ public class ProdutoService {
         return repo.search(categorias,pageRequest);
     }
 
+    public Page<Produto> searchAll(Integer pager, Integer linesPerPage, String orderBy, String direction){
+
+        PageRequest pageRequest = PageRequest.of(pager, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+
+        return repo.findAll(pageRequest);
+    }
+
 
     public void delete(Integer id) {
-
         try{
             repo.deleteById(id);
         }

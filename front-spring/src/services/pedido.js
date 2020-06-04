@@ -2,7 +2,17 @@ import Api from "./config"
 
 
 const getAll = () => {
-    return Api().get('/pedidos')
+
+    let token = localStorage.getItem('token')
+    
+
+    const config = {
+        headers: {
+            Authorization: "Bearer "+token
+        }
+    }
+
+    return Api().get('/pedidos', config)
 }
 
 const post = (data) => {

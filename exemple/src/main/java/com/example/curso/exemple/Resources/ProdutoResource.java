@@ -9,6 +9,7 @@ import com.example.curso.exemple.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -38,6 +39,7 @@ public class ProdutoResource {
         //return ResponseEntity.created(uri).build();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable Integer id){
         service.delete(id);
@@ -57,17 +59,23 @@ public class ProdutoResource {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Page<ProdutoDTO>> findAll(
             //@RequestParam(value = "nome", defaultValue = "") String nome,
-            @RequestParam(value = "categorias", defaultValue = "0") String categorias,
+            @RequestParam(value = "categorias", defaultValue = "all") String categorias,
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "linesPerPage", defaultValue = "100")Integer linesPerPage,
             @RequestParam(value = "orderBy", defaultValue = "nome")String orderBy,
             @RequestParam(value = "direction", defaultValue = "ASC")String direction){
 
-        List<Integer> ids = URL.decodeIntList(categorias);
-
-        //String nomeDecode = URL.decodeParam(nome);
-        Page<Produto> list = service.search(ids,page,linesPerPage,orderBy,direction);
-        Page<ProdutoDTO> listDTO = list.map(obj -> new ProdutoDTO(obj));
-        return ResponseEntity.ok().body(listDTO);
+        String categoria = URL.decodeParam(categorias);
+        if(categoria.equals("all")){
+            Page<Produto> list = service.searchAll(page, linesPerPage, orderBy, direction);
+            Page<ProdutoDTO> listDTO = list.map(obj -> new ProdutoDTO(obj));
+            return ResponseEntity.ok().body(listDTO);
+        }else {
+            List<Integer> ids = URL.decodeIntList(categorias);
+            //String nomeDecode = URL.decodeParam(nome);
+            Page<Produto> list = service.search(ids, page, linesPerPage, orderBy, direction);
+            Page<ProdutoDTO> listDTO = list.map(obj -> new ProdutoDTO(obj));
+            return ResponseEntity.ok().body(listDTO);
+        }
     }
 }
