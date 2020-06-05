@@ -16,7 +16,7 @@
         <b-table :items="tableData" :fields="fields" striped responsive="sm" :busy="isBusy">
           <template v-slot:cell(opções)="row">
             <b-icon class="icon" icon="trash-fill" aria-hidden="true" @click="showModal(row.item)"></b-icon>
-            <b-icon class="icon" icon="pencil" aria-hidden="true" @click="row.toggleDetails"></b-icon>
+            <b-icon class="icon" icon="pencil" aria-hidden="true" @click="row.toggleDetails" @click.once="feedTableTags(row.item.id)"></b-icon>
           </template>
 
           <template v-slot:row-details="row" v-slot:table-busy>
@@ -31,14 +31,34 @@
                   <b-input v-model="row.item.preco"></b-input>
                 </b-form-group>
 
-                <b-form-group class="row">
+                <!-- <b-form-group class="row">
                   <label for="inputEmail3" class="col-sm-2 col-form-label"></label>
                   <div class="col-sm-10">
                     <b-form-group label="Categoria">
                       <b-form-select v-model="selectedCategoria" :options="tableDataCategoria"></b-form-select>
                     </b-form-group>
                   </div>
-                </b-form-group>
+                </b-form-group>-->
+
+                <b-form-tags size="lg" add-on-change no-outer-focus class="mb-2">
+                    <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
+                      <li v-for="(tag,index) in tags" :key="index" class="list-inline-item">
+                        <b-form-tag
+                          @remove="removeTag(tag)"
+                          variant="info"
+                        >{{ tag.text }}</b-form-tag>
+                      </li>
+                    </ul>
+                    <b-form-select
+                      v-model="selectedOptionTags"
+                      :options ="options"
+                    >
+                      <template v-slot:first>
+                        <!-- This is required to prevent bugs with Safari -->
+                        <option disabled value>Escolha seus produtos.</option>
+                      </template>
+                    </b-form-select>
+                </b-form-tags>
               </b-form>
 
               <b-button size="sm" @click="handleEdit(row.item)" variant="primary">Salvar</b-button>
@@ -60,6 +80,9 @@ import Alert from "../components/utils/Alert";
 export default {
   data() {
     return {
+      options: [],
+      tags:[],
+      selectedOptionTags:"",
       tableData: [],
       tableDataCategoria: [],
       fields: ["nome", "preco", "opções"],
@@ -95,7 +118,25 @@ export default {
     }),
     ...mapGetters({
       listIdsCategorias: "getAllIdsCategorias"
-    })
+    }),
+  },
+  watch: {
+    selectedOptionTags(val) {
+
+      if(val != null){
+        var temp = {
+          text: val.nome,
+          value: val
+        }
+        this.tags.push(temp)
+      }
+
+      this.options =  this.options.filter(function(element) {
+      if(element.text != val.nome){
+        return true
+      }
+      })
+    }
   },
 
   async mounted() {
@@ -129,13 +170,29 @@ export default {
           text: element.nome,
           value: element
         };
-        this.tableDataCategoria.push(temp);
+        this.options.push(temp);
       });
     } catch (e) {
       alert(e);
     }
   },
   methods: {
+    async feedTableTags(idItem){
+      try{
+        const response = await Produto.getCategoria(idItem)
+        response.data.forEach(element => {
+          const temp = {
+            text: element.nome,
+            value: element
+          }
+          this.tags.push(temp)
+        })
+        
+      }
+      catch(e){
+        alert(e)
+      }
+    },
     insertListner(item, response) {
       if (response != null) {
         this.showAlert("Item cadastrado com sucesso ! ", "primary", null);
@@ -179,18 +236,34 @@ export default {
     },
 
     async handleEdit(item) {
-      console.log(this.selectedCategoria.id);
-
+      
       try {
         Produto.put(item);
-        const temp = {
-          id: this.selectedCategoria.id
-        }
-        Produto.putCategoria(item.id, temp)
+        const categorias = []
+        this.tags.forEach(element => {
+          const temp = {
+            id: element.value.id
+          }
+          categorias.push(temp)
+        })
+        Produto.putCategoria(item.id, categorias);
+        
         this.showAlert("Item alterado com sucesso", "primary", null);
       } catch (e) {
         this.showAlert("Erro ao alterar item", "danger", e.message);
       }
+    },
+    removeTag(tag){
+      if(tag != null){
+        this.options.push(tag)
+      }
+      this.tags =  this.tags.filter(function(element) {
+      
+        if(element.text != tag.text){
+          return true
+        }
+      })
+      
     }
   }
 };

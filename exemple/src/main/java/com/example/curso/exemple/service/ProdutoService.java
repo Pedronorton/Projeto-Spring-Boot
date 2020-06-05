@@ -33,6 +33,18 @@ public class ProdutoService {
         return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado | id: "+ id + "tipo: "+Produto.class.getName()));
     }
 
+    public List<Categoria> buscarCategorias(Integer id){
+        Optional<Produto> obj;
+        try{
+            obj = repo.findById(id);
+        }
+        catch (ObjectNotFoundException e){
+            throw new ObjectNotFoundException("Objeto não encontrado | id: "+ id + "tipo: "+Produto.class.getName());
+        }
+        List<Categoria> list = obj.get().getCategorias();
+        return list;
+    }
+
     public Produto insert(Produto obj){
         obj = repo.save(obj);
 
@@ -92,10 +104,12 @@ public class ProdutoService {
 
     }
 
-    public Produto updateCategoria(Integer id, Categoria cat){
+    public Produto updateCategoria(Integer id, List<Categoria> listCat){
         Produto newObj = buscar(id);
-        newObj.getCategorias().addAll(Arrays.asList(cat));
-        cat.getProdutos().addAll(Arrays.asList(newObj));
+        for(Categoria cat : listCat){
+            newObj.getCategorias().addAll(Arrays.asList(cat));
+            cat.getProdutos().addAll(Arrays.asList(newObj));
+        }
         return repo.save(newObj);
 
     }

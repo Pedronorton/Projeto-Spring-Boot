@@ -30,6 +30,14 @@ public class ProdutoResource {
 
         return ResponseEntity.ok().body(obj); //retorna um json caso for encontrado
     }
+
+    @RequestMapping(value = "/categoria/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> findCategoria(@PathVariable Integer id){
+        List<Categoria> list = service.buscarCategorias(id);
+
+        return ResponseEntity.ok().body(list); //retorna um json caso for encontrado
+    }
+
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> insert(@RequestBody Produto obj){
         obj = service.insert(obj);
@@ -56,9 +64,9 @@ public class ProdutoResource {
     }
 
     @RequestMapping(value = "/categoria/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateCategoria(@PathVariable Integer id, @RequestBody Categoria cat){
+    public ResponseEntity<?> updateCategoria(@PathVariable Integer id, @RequestBody List<Categoria> listCat){
 
-        Produto obj = service.updateCategoria(id, cat);
+        Produto obj = service.updateCategoria(id, listCat);
 
         return ResponseEntity.noContent().build();
     }

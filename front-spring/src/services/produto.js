@@ -33,6 +33,10 @@ const putCategoria = (id, data) => {
     
     return Api().put(`/produtos/categoria/${id}`, data)
 }
+const getCategoria = (id) => {
+    
+    return Api().get(`/produtos/categoria/${id}`)
+}
 
 export default {
     getPage,
@@ -41,5 +45,6 @@ export default {
     put,
     getAll,
     putCategoria,
+    getCategoria
 
 }
