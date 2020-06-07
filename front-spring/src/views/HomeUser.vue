@@ -12,7 +12,7 @@
         <div class="row produtos">
           <div  class="card" v-for="(item,index) in tableDataProdutos" :key="index">
             <div class="col">
-              <CardProdutos :nomeProduto="item.nome" :precoProduto="item.preco"/>
+              <CardProdutos :nomeProduto="item.nome" :precoProduto="item.preco" :imageUrl="item.imageUrl"/>
             </div>
           </div>
         </div>
@@ -72,12 +72,13 @@ export default {
       alert(e)
     }
     try{
-      const res = await Produto.getPage(this.idsCategoria.toString());
+      const res = await Produto.getAll();
       
       if(Object.keys(res).length != 0){
         res.data.content.forEach(element => {
+          console.log(element.imageUrl);
           
-          this.$store.state.tableDataProdutos.push({id: element.id, nome: element.nome, preco: element.preco})
+          this.$store.state.tableDataProdutos.push({id: element.id, nome: element.nome, preco: element.preco, imageUrl: element.imageUrl})
           
         });
       }

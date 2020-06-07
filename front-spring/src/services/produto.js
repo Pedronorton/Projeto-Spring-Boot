@@ -12,7 +12,12 @@ const getAll = () => {
 }
 
 const post = (data) => {
-    return Api().post('/produtos', data);
+    let formData = new FormData();
+    formData.append('nome', data.nome);
+    formData.append('preco', data.preco);
+    formData.append('file', data.imageUrl);
+    
+    return Api().post('/produtos', formData);
 }
 
 const del = (id) => {
@@ -27,7 +32,17 @@ const del = (id) => {
 }
 
 const put = (data) => {
-    return Api().put(`/produtos/${data.id}`, data)
+    let formData = new FormData();
+    formData.append('nome', data.nome);
+    formData.append('preco', data.preco);
+    formData.append('file', data.imageUrl);
+    const config = {
+        headers: {
+            "content-Type": "multipart/form-data",
+        }
+    }
+
+    return Api().put(`/produtos/${data.id}`, formData, config)
 }
 const putCategoria = (id, data) => {
     

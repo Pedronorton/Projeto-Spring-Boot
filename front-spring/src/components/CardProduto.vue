@@ -2,7 +2,7 @@
   <div>
     <b-card
       
-      img-src="https://picsum.photos/600/300/?image=25"
+      :img-src="imageUrl"
       img-alt="Image"
       img-top
       tag="article"
@@ -30,6 +30,10 @@ export default {
     },
     precoProduto:{
       type: Number,
+      required: true
+    },
+    imageUrl:{
+      type: String,
       required: true
     }
   },

@@ -11,6 +11,15 @@
         <b-form-group label="Preço">
           <b-form-input v-model="saveItem.preco"></b-form-input>
         </b-form-group>
+
+        <b-form-group label="Imagem do produto">
+          <b-form-file
+              v-model="saveItem.imageUrl"
+              :state="Boolean(saveItem.imageUrl)"
+              placeholder="Choose a file or drop it here..."
+              drop-placeholder="Drop file here..."
+            ></b-form-file>
+        </b-form-group>
       </form>
     </b-modal>
   </div>
@@ -25,9 +34,11 @@ export default {
   data() {
     return {
       visible: 0,
+      file: null,
       saveItem: {
         nome: "",
         preco:"",
+        imageUrl: "",
       },
       alertBody: {
         message: "",
@@ -37,7 +48,8 @@ export default {
   },
   methods: {
     ...mapActions(["setTime"]),
-    async handleSave() {
+    async handleSave() { 
+      console.log(this.saveItem)
       try {
         const res = await Produto.post(this.saveItem);
         this.$emit("emit-click", this.saveItem, res.data);

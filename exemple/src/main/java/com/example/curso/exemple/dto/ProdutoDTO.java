@@ -11,15 +11,24 @@ public class ProdutoDTO implements Serializable {
     private Integer id;
     private String nome;
     private Double preco;
-
+    private String imageUrl;
     public ProdutoDTO(Produto obj){
         id = obj.getId();
         nome = obj.getNome();
         preco = obj.getPreco();
+        imageUrl = obj.getImageUrl();
     }
 
     public ProdutoDTO(){
 
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Integer getId() {

@@ -17,6 +17,7 @@ public class Produto implements Serializable {
     private Integer id;
     private String nome;
     private Double preco;
+    private String imageUrl;
 
     @JsonIgnore // faz com que a referencia não seja buscada novamente
     @ManyToMany
@@ -31,10 +32,11 @@ public class Produto implements Serializable {
     @OneToMany(mappedBy = "id.produto")
     private Set<ItemPedido> itens = new HashSet<>();
 
-    public Produto(Integer id, String nome, Double preco){
+    public Produto(Integer id, String nome, Double preco, String imageUrl){
         this.id = id;
         this.nome = nome;
         this.preco = preco;
+        this.imageUrl = imageUrl;
     }
 
 
@@ -91,6 +93,13 @@ public class Produto implements Serializable {
         this.itens = itens;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

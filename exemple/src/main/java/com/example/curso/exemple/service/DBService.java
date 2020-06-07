@@ -49,17 +49,17 @@ public class DBService {
         Categoria cat7 = new Categoria(null,"churrasco");
         Categoria cat8 = new Categoria(null,"bebedeira");
 
-        Produto p1 = new Produto(null, "computador", 2000.00);
-        Produto p2 = new Produto(null, "impressora", 150.00);
-        Produto p3 = new Produto(null, "telefone", 50.00);
-        Produto p4 = new Produto(null, "Mesa de escritório", 300.00);
-        Produto p5 = new Produto(null, "Toalha", 50.00);
-        Produto p6 = new Produto(null, "Colcha", 200.00);
-        Produto p7 = new Produto(null, "TV true color", 1200.00);
-        Produto p8 = new Produto(null, "Roçadeira", 800.00);
-        Produto p9 = new Produto(null, "Abajour", 100.00);
-        Produto p10 = new Produto(null, "Pendente", 180.00);
-        Produto p11 = new Produto(null, "Shampoo", 90.00);
+        Produto p1 = new Produto(null, "computador", 2000.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
+        Produto p2 = new Produto(null, "impressora", 150.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
+        Produto p3 = new Produto(null, "telefone", 50.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
+        Produto p4 = new Produto(null, "Mesa de escritório", 300.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
+        Produto p5 = new Produto(null, "Toalha", 50.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
+        Produto p6 = new Produto(null, "Colcha", 200.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
+        Produto p7 = new Produto(null, "TV true color", 1200.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
+        Produto p8 = new Produto(null, "Roçadeira", 800.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
+        Produto p9 = new Produto(null, "Abajour", 100.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
+        Produto p10 = new Produto(null, "Pendente", 180.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
+        Produto p11 = new Produto(null, "Shampoo", 90.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
 
         p1.getCategorias().addAll(Arrays.asList(cat1, cat4));
         p2.getCategorias().addAll(Arrays.asList(cat1, cat2, cat4));

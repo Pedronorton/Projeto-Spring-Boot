@@ -57,7 +57,8 @@ export default {
             this.$store.state.tableDataProdutos.push({
               id: element.id,
               nome: element.nome,
-              preco: element.preco
+              preco: element.preco,
+              imageUrl: element.imageUrl
             });
           });
         }

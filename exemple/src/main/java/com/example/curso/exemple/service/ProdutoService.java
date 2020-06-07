@@ -1,6 +1,7 @@
 package com.example.curso.exemple.service;
 
 import com.example.curso.exemple.domain.Categoria;
+import com.example.curso.exemple.domain.Cliente;
 import com.example.curso.exemple.domain.Pedido;
 import com.example.curso.exemple.domain.Produto;
 import com.example.curso.exemple.repositories.CategoriaRepository;
@@ -16,7 +17,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 
 @Service
@@ -27,6 +33,11 @@ public class ProdutoService {
 
     @Autowired
     private CategoriaRepository categoriaRepository;
+
+    @Autowired
+    private ImageService imageService;
+    @Autowired
+    private S3Service s3Service;
 
     public Produto buscar(Integer id){
         Optional<Produto> obj = repo.findById(id);
@@ -45,8 +56,17 @@ public class ProdutoService {
         return list;
     }
 
-    public Produto insert(Produto obj){
+    public Produto insert(Produto obj, MultipartFile file) throws IOException, URISyntaxException {
         obj = repo.save(obj);
+        BufferedImage jpgImage = imageService.getJpgImageFromFile(file);
+        String fileName = "Produto "+ obj.getId() + "jpg";
+
+        URI uri = s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
+
+        Optional<Produto> produto = repo.findById(obj.getId());
+
+        produto.get().setImageUrl(uri.toString());
+        repo.save(produto.get());
 
         return obj;
     }
@@ -115,6 +135,7 @@ public class ProdutoService {
     }
 
     public void updateData(Produto newObj, Produto obj){ // possível apenas mudar o preço
+        newObj.setImageUrl(obj.getImageUrl());
         newObj.setPreco(obj.getPreco());
     }
 }
