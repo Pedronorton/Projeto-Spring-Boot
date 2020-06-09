@@ -12,6 +12,10 @@ import AdminRouter from "../components/AdminRouter"
 import Login from "../components/Login"
 import Auth from "../services/Auth"
 import HomeUser from "../views/HomeUser"
+import LoginUser from "../components/user/LoginUser"
+import EsqueciSenha from "../components/user/EsqueciSenha"
+import DetalhesProduto from "../components/user/DetalhesProduto"
+import FecharCompra from "../components/user/FecharCompra"
 Vue.use(Router)
 
 export default new Router({
@@ -27,6 +31,28 @@ export default new Router({
       name: 'HomeUser',
       component: HomeUser,
     },
+    {
+      
+      path: '/detalhes-produtos/:id',
+      name: 'DetalhesProduto',
+      component: DetalhesProduto,
+    },
+    {
+      
+      path: '/finalizar-compra',
+      name: 'FecharCompra',
+      component: FecharCompra,
+    },
+    {
+      path: '/login-user',
+      name: 'LoginUser',
+      component: LoginUser,
+    },
+    {
+      path: '/forgot-pass',
+      name: 'EsqueciSenha',
+      component: EsqueciSenha,
+    },
 
     {
       path:"",
@@ -34,8 +60,13 @@ export default new Router({
       component:AdminRouter , 
       async beforeEnter(to, from, next) {
         if(await Auth.isValidToken() == true){
-          next()
+          if(await Auth.getUser() == "ADMIN"){
+            next()
+          }else{
+            alert("Acesso negado")
+          }
         }else{
+          alert("Usuário ou senhas errados")
           next("/login")
         }
       },
