@@ -1,9 +1,12 @@
 import Api from './config'
 
 
+const getOne = (id) => {
+    return Api().get(`/produtos/${id}`)
+}
+
 const getPage = (ids) => {
     
-
     return Api().get(`/produtos?categorias=${ids}`)
 }
 
@@ -11,11 +14,12 @@ const getAll = () => {
     return Api().get('/produtos')
 }
 
-const post = (data) => {
+const post = (data, categorias) => {
     let formData = new FormData();
     formData.append('nome', data.nome);
     formData.append('preco', data.preco);
     formData.append('file', data.imageUrl);
+    formData.append('lista', categorias)
     
     return Api().post('/produtos', formData);
 }
@@ -44,10 +48,12 @@ const put = (data) => {
 
     return Api().put(`/produtos/${data.id}`, formData, config)
 }
+
 const putCategoria = (id, data) => {
     
     return Api().put(`/produtos/categoria/${id}`, data)
 }
+
 const getCategoria = (id) => {
     
     return Api().get(`/produtos/categoria/${id}`)
@@ -60,6 +66,7 @@ export default {
     put,
     getAll,
     putCategoria,
-    getCategoria
+    getCategoria,
+    getOne
 
 }

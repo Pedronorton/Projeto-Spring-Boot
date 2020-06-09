@@ -46,7 +46,7 @@ public class CategoriaResource {
         return ResponseEntity.ok().body(obj);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> insert(@Valid @RequestBody CategoriaDTO objDto){ // Request body serve para transformar de Json para objeto
         Categoria obj = service.fromDTO(objDto);
@@ -55,7 +55,7 @@ public class CategoriaResource {
         return ResponseEntity.ok().body(obj.getId());
         //return ResponseEntity.created(uri).build();
     }
-    @PreAuthorize("hasAnyRole('ADMIN')")
+
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<?> update(@Valid @RequestBody CategoriaDTO objDTO, @PathVariable Integer id){
         Categoria obj = service.fromDTO(objDTO);
@@ -64,14 +64,14 @@ public class CategoriaResource {
 
         return ResponseEntity.noContent().build();
     }
-    @PreAuthorize("hasAnyRole('ADMIN')")
+
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable Integer id){
         service.delete(id);
 
         return ResponseEntity.noContent().build();
     }
-    @PreAuthorize("hasAnyRole('ADMIN')")
+
     @RequestMapping(value = "/page", method = RequestMethod.GET)
     public ResponseEntity<?> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                      @RequestParam(value = "linesPerPage", defaultValue = "2")Integer linesPerPage,

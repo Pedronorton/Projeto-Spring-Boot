@@ -1,5 +1,6 @@
 package com.example.curso.exemple.Resources;
 
+import com.example.curso.exemple.Resources.utils.ConvertIdsToCategoria;
 import com.example.curso.exemple.Resources.utils.URL;
 import com.example.curso.exemple.domain.Categoria;
 import com.example.curso.exemple.domain.Produto;
@@ -20,6 +21,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -35,6 +37,8 @@ public class ProdutoResource {
     @Autowired
     private S3Service s3Service;
 
+    @Autowired
+    private  ConvertIdsToCategoria convertIdsToCategoria;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> find(@PathVariable Integer id){
@@ -51,9 +55,15 @@ public class ProdutoResource {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> insert(@RequestParam(name="nome") String nome, @RequestParam(name="preco") Double preco, @RequestParam(name="file") MultipartFile file ) throws IOException, URISyntaxException {
+    public ResponseEntity<?> insert(@RequestParam(name="nome") String nome, @RequestParam(name="preco") Double preco, @RequestParam(name="file") MultipartFile file, @RequestParam(name="lista") List<Integer> listaIds ) throws IOException, URISyntaxException {
         Produto obj = new Produto(null, nome, preco, "");
 
+
+        List<Categoria> cat = convertIdsToCategoria.convert(listaIds);
+
+        for(Categoria x : cat){
+            obj.getCategorias().addAll(Arrays.asList(x));
+        }
         obj = service.insert(obj, file);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
