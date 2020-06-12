@@ -1,8 +1,8 @@
 <template>
   <div class="home">
     <div>
-      <Navbar class="navb" />
-      <FiltroProdutos class="filtro"/>
+      <!-- <NavbarUser class="navb" /> -->
+      <!-- <FiltroProdutos class="filtro"/> -->
     </div>
     <div>
       <div class="carousel">
@@ -12,7 +12,7 @@
         <div class="row produtos">
           <div  class="card" v-for="(item,index) in tableDataProdutos" :key="index">
             <div class="col">
-              <CardProdutos :nomeProduto="item.nome" :precoProduto="item.preco" :imageUrl="item.imageUrl"/>
+              <CardProdutos :id="item.id" :nomeProduto="item.nome" :precoProduto="item.preco" :imageUrl="item.imageUrl"/>
             </div>
           </div>
         </div>
@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import FiltroProdutos from '../components/FiltroProdutos'
-import Navbar from "../components/Navbar";
+// import FiltroProdutos from '../components/FiltroProdutos'
+// import NavbarUser from "../components/user/NavbarUser";
 import HomeCarroussel from "../components/HomeCarroussel";
 import CardProdutos from "../components/CardProduto";
 import Produto from "../services/produto"
@@ -32,10 +32,10 @@ import {mapState, mapActions, mapGetters} from 'vuex'
 export default {
   name: "HomeUser",
   components: {
-    Navbar,
+    // NavbarUser,
     HomeCarroussel,
     CardProdutos,
-    FiltroProdutos,
+    // FiltroProdutos,
   },
   computed:{
     ...mapState({
