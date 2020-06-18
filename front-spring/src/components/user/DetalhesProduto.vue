@@ -5,20 +5,23 @@
     <div class="container product-box">
       <div class="product-image">
         <b-img :src="contentProduct.imageUrl"></b-img>
-        <Avaliacao class="rate" :rate="rated(stars)" :totalReviews="review"/>
+        <Avaliacao class="rate" :rate="rated(stars)" :totalReviews="review" />
       </div>
       <div class="product-info">
-        <h1 class="product-title">{{contentProduct.nome}}</h1>
+        <h1 class="product-title">{{contentProduct.nomeProduto}}</h1>
 
-        <h1 class="product-price">{{contentProduct.preco}}</h1>
-      <div class="div-button">
-        <b-button class="button button-buy" @click="handleBag()">
-          <b-icon icon="cart"></b-icon>Comprar
-        </b-button>
-        <b-button class="button button-info">
-          <b-icon icon="cart"></b-icon>Mais informações
-        </b-button>
-      </div>
+        <h1 class="product-price">{{contentProduct.precoProduto.toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      })}}</h1>
+        <div class="div-button">
+          <b-button class="button button-buy" @click="handleBag()">
+            <b-icon icon="cart"></b-icon>Comprar
+          </b-button>
+          <b-button class="button button-info">
+            <b-icon icon="cart"></b-icon>Mais informações
+          </b-button>
+        </div>
       </div>
     </div>
   </div>
@@ -29,7 +32,7 @@ import { mapActions, mapGetters, mapState } from "vuex";
 // import Navbar from "./NavbarUser";
 import Alert from "../utils/Alert";
 import Produto from "@/services/produto";
-import Avaliacao from "./Avaliacao"
+import Avaliacao from "./Avaliacao";
 export default {
   name: "DetalhesProduto",
   components: {
@@ -45,8 +48,8 @@ export default {
       contentProduct: {
         id: "",
         imageUrl: "",
-        nome: "",
-        preco: ""
+        nomeProduto: "",
+        precoProduto: ""
       },
       alertBody: {
         message: "",
@@ -64,12 +67,9 @@ export default {
     try {
       const response = await Produto.getOne(this.$route.params.id);
       this.contentProduct.id = response.data.id;
-      this.contentProduct.preco = response.data.preco.toLocaleString("pt-br", {
-        style: "currency",
-        currency: "BRL"
-      });
+      this.contentProduct.precoProduto = response.data.preco;
       this.contentProduct.imageUrl = response.data.imageUrl;
-      this.contentProduct.nome = response.data.nome;
+      this.contentProduct.nomeProduto = response.data.nome;
     } catch (e) {
       alert(e);
     }
@@ -78,22 +78,6 @@ export default {
     ...mapActions(["setProductOnCart"]),
     handleBag() {
       this.$store.state.tableProductsOnCart.push(this.contentProduct);
-      // var temp = []
-
-      if (localStorage.getItem("items") === null) {
-        // Adicionando um array com um objeto no localstorage
-        localStorage.setItem("items", JSON.stringify([this.contentProduct]));
-      } else {
-        // Copiando o array existente no localstorage e adicionando o novo objeto ao final.
-        localStorage.setItem(
-          "items",
-          // O JSON.parse transforma a string em JSON novamente, o inverso do JSON.strigify
-          JSON.stringify([
-            ...JSON.parse(localStorage.getItem("items")),
-            this.contentProduct
-          ])
-        );
-      }
 
       this.showAlert("Item inserido na sacola", "primary", null);
     },
@@ -110,36 +94,35 @@ export default {
     },
     rated(rate) {
       return `${rate * 20}%`;
-    },
+    }
   }
 };
 </script>
 
 <style scoped>
-.product-box{
+.product-box {
   margin-top: 50px;
   width: 800px;
   display: flex;
 }
-.product-image{
+.product-image {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.rate{
+.rate {
   width: 70%;
 }
-.product-info{
+.product-info {
   /* display: flex; */
-   margin-left: 30px;
-   width: 400px;
-   text-align: justify;
+  margin-left: 30px;
+  width: 400px;
+  text-align: justify;
 }
 .product-title {
   font-weight: 300;
   font-size: 1.5em;
   display: flex;
-
 }
 .product-price {
   font-size: 2em;
@@ -147,7 +130,7 @@ export default {
   display: flex;
   align-content: flex-start;
 }
-.div-button{
+.div-button {
   width: 300px;
   display: flex;
   flex-direction: column;
@@ -164,5 +147,4 @@ export default {
   background-color: #2d9cdb;
   /* border-color: #2d9cdb; */
 }
-
 </style>

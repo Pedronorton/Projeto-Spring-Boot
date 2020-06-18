@@ -6,8 +6,11 @@
           <b-button class="button-delete" @click="removeItem(index)">x</b-button>
           <b-img class="image-cart" :src="produto.imageUrl"></b-img>
 
-          <h3 class="item-nome">{{ produto.nome }}</h3>
-          <span class="item-preco">{{ produto.preco }}</span>
+          <h3 class="item-nome">{{ produto.nomeProduto }}</h3>
+          <span class="item-preco">{{ produto.precoProduto.toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      }) }}</span>
         </div>
         <span v-if="getProductsOnCart.length > 0" class="total-cart">Total:{{total()}}</span>
         <span v-if="getProductsOnCart.length == 0" class="total-cart">Nenhum produto no carrinho</span>
@@ -35,9 +38,8 @@ export default {
       var precoTotal = 0;
       var precoElement = 0;
       this.getProductsOnCart.forEach(element => {
-        precoElement = element.preco.replace("R$", "");
-        precoElement = parseFloat(precoElement);
-        precoTotal += precoElement;
+        precoElement = parseFloat(element.precoProduto);
+        precoTotal += precoElement;  
       });
       return precoTotal.toLocaleString("pt-BR", {
         style: "currency",
