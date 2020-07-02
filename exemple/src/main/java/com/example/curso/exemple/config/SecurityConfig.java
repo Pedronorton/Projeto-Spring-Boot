@@ -42,19 +42,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //ROTAS PARA ACESSO SEM ESTAR LOGADO
     private static final String[] PUBLIC_MATCHERS = {
             "/h2-console/**",
+            "/pedidos/**",
+            "/categoria/**",
+            "/produtos/**",
+            "/auth/**"
+
     };
     private static final String[] PUBLIC_MATCHERS_GET = {
             "/produtos/**",
             "/categoria/**",
             "/cidades/**",
             "/clientes/**",
+            "/pedidos/**",
 
     };
     private static final String[] PUBLIC_MATCHERS_POST = {
             "/clientes/**",
             "/auth/forgot/**",
             "/auth/validateToken/**",
-            "/pedidos/**"
+            "/pedidos/**",
+            "/produtos/**",
+
 
     };
 
@@ -62,7 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
 
-        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()).and().csrf().disable();
+        http.cors().and().csrf().disable();
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
                 .antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()

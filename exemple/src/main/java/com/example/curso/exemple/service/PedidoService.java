@@ -11,8 +11,10 @@ import com.example.curso.exemple.security.UserSS;
 import com.example.curso.exemple.service.exception.AuthorizationException;
 import com.example.curso.exemple.service.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 import java.util.*;
 
@@ -77,33 +79,36 @@ public class PedidoService {
 
     @Transactional
     public Pedido insert(Pedido obj){
-        obj.setId(null);
-        obj.setInstante(new Date());
-        obj.getPagamento().setEstado(EstadoPagamento.PENDENTE);
-        obj.getPagamento().setPedido(obj);
-        obj.setCliente(clienteRepository.getOne(obj.getCliente().getId()));
+        UserSS user = UserService.authenticated();
+        if(user != null) {
+            obj.setId(null);
+            obj.setInstante(new Date());
+            obj.getPagamento().setEstado(EstadoPagamento.PENDENTE);
+            obj.getPagamento().setPedido(obj);
+            obj.setCliente(clienteRepository.getOne(obj.getCliente().getId()));
 
 
-        if(obj.getPagamento() instanceof PagamentoBoleto){
-            PagamentoBoleto pgto = (PagamentoBoleto) obj.getPagamento();
-            boletoService.preencherPagamentoComBoleto(pgto, obj.getInstante());
+            if (obj.getPagamento() instanceof PagamentoBoleto) {
+                PagamentoBoleto pgto = (PagamentoBoleto) obj.getPagamento();
+                boletoService.preencherPagamentoComBoleto(pgto, obj.getInstante());
+            }
+
+            obj = repo.save(obj);
+            pagamentoRepository.save(obj.getPagamento());
+
+            for (ItemPedido ip : obj.getItens()) {
+                ip.setDesconto(0.0);
+                ip.setProduto(produtoService.buscar(ip.getProduto().getId()));
+                ip.setPreco(produtoService.buscar(ip.getProduto().getId()).getPreco());
+                ip.setPedido(obj);
+            }
+
+            itemPedidoRepository.saveAll(obj.getItens());
+            emailService.sendOrderComfirmationHtmlEmail(obj);
+            //emailService.sendOrderComfirmationEmail(obj);
+            return obj;
         }
-
-        obj = repo.save(obj);
-        pagamentoRepository.save(obj.getPagamento());
-
-        for(ItemPedido ip : obj.getItens()){
-            ip.setDesconto(0.0);
-            ip.setProduto(produtoService.buscar(ip.getProduto().getId()));
-            ip.setPreco(produtoService.buscar(ip.getProduto().getId()).getPreco());
-            ip.setPedido(obj);
-        }
-
-        itemPedidoRepository.saveAll(obj.getItens());
-        emailService.sendOrderComfirmationHtmlEmail(obj);
-        //emailService.sendOrderComfirmationEmail(obj);
-
-        return obj;
+        throw new RuntimeException("Cliente inexistente");
     }
 
 }

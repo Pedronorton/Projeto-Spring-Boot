@@ -1,7 +1,7 @@
 package com.example.curso.exemple.service;
 
 
-import com.example.curso.exemple.service.exception.FileException;
+
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

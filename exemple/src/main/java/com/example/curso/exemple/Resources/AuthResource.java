@@ -2,10 +2,14 @@ package com.example.curso.exemple.Resources;
 
 
 import com.example.curso.exemple.dto.EmailDTO;
+import com.example.curso.exemple.dto.UserDTO;
+import com.example.curso.exemple.enums.Perfil;
 import com.example.curso.exemple.security.JWTUtil;
 import com.example.curso.exemple.security.UserSS;
 import com.example.curso.exemple.service.AuthService;
 import com.example.curso.exemple.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,28 +43,19 @@ public class AuthResource {
         return ResponseEntity.noContent().build();
     }
 
-    /*@RequestMapping(value = "/validateToken", method = RequestMethod.POST)
-    public ResponseEntity validToken(@RequestBody String token){
-
-        return ResponseEntity.ok().body(jwtUtil.tokenValido(token));
-    }*/
-
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public ResponseEntity getUser(){
+        UserSS user = UserService.authenticated();
+        if(user != null){
+            return ResponseEntity.ok().body(user.getAuthorities());
+        }else{
+            return ResponseEntity.noContent().build();
+        }
+    }
     @RequestMapping(value = "/validateToken", method = RequestMethod.POST)
     public ResponseEntity validToken(@RequestParam(value = "token") String token){
 
         return ResponseEntity.ok().body(jwtUtil.tokenValido(token));
     }
-
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public ResponseEntity isAdmin(){
-
-        return ResponseEntity.ok().body(service.user());
-    }
-
-
-
-
-
-
 
 }

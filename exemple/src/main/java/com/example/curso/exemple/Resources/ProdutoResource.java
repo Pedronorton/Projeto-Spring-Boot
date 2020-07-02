@@ -6,9 +6,11 @@ import com.example.curso.exemple.domain.Categoria;
 import com.example.curso.exemple.domain.Produto;
 import com.example.curso.exemple.dto.CategoriaDTO;
 import com.example.curso.exemple.dto.ProdutoDTO;
+import com.example.curso.exemple.dto.ProdutoNewDTO;
 import com.example.curso.exemple.service.ImageService;
 import com.example.curso.exemple.service.ProdutoService;
 import com.example.curso.exemple.service.S3Service;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -105,7 +107,7 @@ public class ProdutoResource {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Page<ProdutoDTO>> findAll(
-            //@RequestParam(value = "nome", defaultValue = "") String nome,
+            @RequestParam(value = "nome", defaultValue = "") String nome,
             @RequestParam(value = "categorias", defaultValue = "all") String categorias,
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "linesPerPage", defaultValue = "100")Integer linesPerPage,
@@ -119,7 +121,7 @@ public class ProdutoResource {
             return ResponseEntity.ok().body(listDTO);
         }else {
             List<Integer> ids = URL.decodeIntList(categorias);
-            //String nomeDecode = URL.decodeParam(nome);
+            String nomeDecode = URL.decodeParam(nome);
             Page<Produto> list = service.search(ids, page, linesPerPage, orderBy, direction);
             Page<ProdutoDTO> listDTO = list.map(obj -> new ProdutoDTO(obj));
             return ResponseEntity.ok().body(listDTO);

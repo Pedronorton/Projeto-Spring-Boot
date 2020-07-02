@@ -15,7 +15,7 @@ import java.util.List;
 public interface ProdutoRepository extends JpaRepository<Produto, Integer> { //essa interface ela é capaz de fazer busca com base em um tipo de dado e seu tipo identificador <tipo de dado, identificador>
 
     @Transactional(readOnly = true)
-    @Query("SELECT DISTINCT obj FROM Produto obj INNER JOIN obj.categorias cat WHERE  cat IN :categorias ")//Para eu fazer uma consulta qualquer usando JPQL
+    @Query("SELECT DISTINCT obj FROM Produto obj INNER JOIN obj.categorias cat WHERE cat IN :categorias ")//Para eu fazer uma consulta qualquer usando JPQL
     Page<Produto> search(@Param("categorias") List<Categoria> categorias, Pageable pageRequest);
 
 }

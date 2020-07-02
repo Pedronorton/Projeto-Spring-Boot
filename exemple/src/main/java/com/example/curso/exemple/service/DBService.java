@@ -49,17 +49,17 @@ public class DBService {
         Categoria cat7 = new Categoria(null,"churrasco");
         Categoria cat8 = new Categoria(null,"bebedeira");
 
-        Produto p1 = new Produto(null, "computador", 2000.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
-        Produto p2 = new Produto(null, "impressora", 150.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
-        Produto p3 = new Produto(null, "telefone", 50.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
-        Produto p4 = new Produto(null, "Mesa de escritório", 300.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
-        Produto p5 = new Produto(null, "Toalha", 50.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
-        Produto p6 = new Produto(null, "Colcha", 200.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
-        Produto p7 = new Produto(null, "TV true color", 1200.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
-        Produto p8 = new Produto(null, "Roçadeira", 800.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
-        Produto p9 = new Produto(null, "Abajour", 100.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
-        Produto p10 = new Produto(null, "Pendente", 180.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
-        Produto p11 = new Produto(null, "Shampoo", 90.00, "https://curso-spring-pedro.s3-sa-east-1.amazonaws.com/cp1jpg");
+        Produto p1 = new Produto(null, "Notebook Compaq Presario CQ32 Intel Pentium 4GB 120GB SSD 14\" W10", 2000.00, "https://images-americanas.b2w.io/produtos/01/00/img/1499041/9/1499041951G1.jpg");
+        Produto p2 = new Produto(null, "Smartphone Samsung Galaxy A10 32GB Dual Chip Android 9.0 Tela 6.2\" Octa-Core 4G Câmera 13MP - Preto", 150.00, "https://images-americanas.b2w.io/produtos/01/00/img7/01/00/item/134253/9/134253960G1.jpg");
+        Produto p3 = new Produto(null, "Lavadora de Roupas Brastemp 9kg Branca BWJ09 - 220V", 50.00, "https://images-americanas.b2w.io/produtos/01/00/img7/01/00/item/132733/9/132733927G1.png");
+        Produto p4 = new Produto(null, "Cadeira Gamer MX0 Giratoria Preto - Mymax", 300.00, "https://images-americanas.b2w.io/produtos/01/00/img/1335014/4/1335014498G1.jpg");
+        Produto p5 = new Produto(null, "Smart TV LED 32'' Samsung 32T4300 HD - WIFI, HDR para Brilho e Contraste, Plataforma Tizen, 2 HDMI, 1 USB - Preta", 1199.00, "https://images-americanas.b2w.io/produtos/01/00/img/1618074/6/1618074634G1.jpg");
+        Produto p6 = new Produto(null, "Batedeira Planetária Oster OBAT651 12 Velocidades Inox Preto - 750w 220v", 549.99, "https://images-americanas.b2w.io/produtos/01/00/image/134269/8/134269857G1.jpg");
+        Produto p7 = new Produto(null, "Af-55 I - Fritadeira Grand Family Inox-5,5l 127v - Mondial", 1200.00, "https://images-americanas.b2w.io/produtos/01/00/img/133855/7/133855766_1GG.jpg");
+        Produto p8 = new Produto(null, "Kit Gamer Teclado/mouse/ Mouse Pad/ Headset Trust", 252.99, "https://images-americanas.b2w.io/produtos/01/00/oferta/41352/2/41352219_1GG.jpg");
+        Produto p9 = new Produto(null, "Ar Condicionado Split Hw Dual Inverter Voice Lg 12000 Btus Frio 220V Monofasico S4NQ12JA31C.EB2GAMZ", 100.00, "https://images-americanas.b2w.io/produtos/01/00/img/460503/2/460503231G1.jpg");
+        Produto p10 = new Produto(null, "Panela De Pressão Digital 6l Inox Vermelho Pppv 01 220v", 539.89, "https://images-americanas.b2w.io/produtos/01/00/offers/01/00/item/132522/7/132522724G1.jpg");
+        Produto p11 = new Produto(null, "Forno Elétrico Oster nano silver ultra 46l 127v", 399.99, "https://images-americanas.b2w.io/produtos/01/00/images/134494/0/134494018G1.jpg");
 
         p1.getCategorias().addAll(Arrays.asList(cat1, cat4));
         p2.getCategorias().addAll(Arrays.asList(cat1, cat2, cat4));

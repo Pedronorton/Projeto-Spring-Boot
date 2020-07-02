@@ -4,6 +4,7 @@ import com.example.curso.exemple.domain.Categoria;
 import com.example.curso.exemple.domain.Cliente;
 import com.example.curso.exemple.domain.Pedido;
 import com.example.curso.exemple.domain.Produto;
+import com.example.curso.exemple.dto.ProdutoNewDTO;
 import com.example.curso.exemple.repositories.CategoriaRepository;
 import com.example.curso.exemple.repositories.PedidoRepository;
 import com.example.curso.exemple.repositories.ProdutoRepository;
@@ -57,17 +58,22 @@ public class ProdutoService {
     }
 
     public Produto insert(Produto obj, MultipartFile file) throws IOException, URISyntaxException {
-        obj = repo.save(obj);
         BufferedImage jpgImage = imageService.getJpgImageFromFile(file);
+        obj = repo.save(obj);
         String fileName = "Produto "+ obj.getId() + "jpg";
-
         URI uri = s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
 
         Optional<Produto> produto = repo.findById(obj.getId());
-
         produto.get().setImageUrl(uri.toString());
         repo.save(produto.get());
 
+        return obj;
+    }
+
+    public Produto fromDTO(ProdutoNewDTO objDTO) throws IOException, URISyntaxException {
+
+        Produto obj = new Produto(null, objDTO.getNome(), objDTO.getPreco(),  null);
+        obj.getCategorias().addAll(objDTO.getListaCategorias());
         return obj;
     }
 

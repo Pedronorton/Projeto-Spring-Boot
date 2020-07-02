@@ -63,13 +63,10 @@ public class AuthService {
         }
     }
 
-    public Boolean isAdmin(){
+    public UserSS user(){
         UserSS user = UserService.authenticated();
-        if(user.hasRole(Perfil.ADMIN)){
-            return true;
-        }else{
-            return false;
-        }
+
+        return user;
     }
 
 
