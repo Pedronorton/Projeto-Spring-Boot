@@ -2,7 +2,9 @@ package com.example.curso.exemple.service;
 
 import com.example.curso.exemple.security.UserSS;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserService {
 
     public static UserSS authenticated(){
