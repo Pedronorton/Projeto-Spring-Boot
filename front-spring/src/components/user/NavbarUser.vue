@@ -1,7 +1,9 @@
 <template>
   <nav class="navbar">
     <div class="nav-left">
-      <b-img :src="require(`@/assets/logo_size.jpg`)" class="logo-image"></b-img>
+      <router-link to="/">
+        <b-img :src="require(`@/assets/logo_size.jpg`)" class="logo-image"></b-img>
+      </router-link>
     </div>
 
     <div class="nav-search">
@@ -14,17 +16,24 @@
           </b-form-group>
         </b-form>
         </li>
-      
-      
-        <li class="nav-item nome">{{items[0].label}} {{items[0].nameUser}}</li>
+        <li class="nav-item nome">{{items[0].label}}{{items[0].nameUser}}
+        </li>
       </ul>
     </div>
     <div class="nav-right">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <b-button @click="showModalCart">
+          <b-button variant="primary" @click="showModalCart">
             Carrinho
-            <b-badge variant="primary">{{getProductsOnCart.length}}</b-badge>
+            <b-badge variant="dark">{{getProductsOnCart.length}}</b-badge>
+          </b-button>
+        </li>
+        <li class="nav-item">
+          <b-button class ="button-nav" variant="primary" v-if="!presentUserFlag" href="/login-user">
+            Login
+          </b-button>
+          <b-button class="button-nav" variant="primary" v-if="presentUserFlag" @click="logout()">
+            Logout
           </b-button>
         </li>
       </ul>
@@ -40,11 +49,12 @@ export default {
   components: {},
   data() {
     return {
+      presentUserFlag:false,
       items: [
         {
           id: "0",
           label: "olá, ",
-          nameUser: ""
+          nameUser: "cliente"
         },
         {
           id: "1",
@@ -52,7 +62,7 @@ export default {
           path: ""
         },
         {
-          id: "0",
+          id: "2",
           label:"",
 
         }
@@ -64,13 +74,13 @@ export default {
       'getProductsOnCart',
     ])
   },
-
   async created() {
     try {
       const response = await Cliente.getUserAutenticated();
       this.items[0].nameUser = response.data.nome;
+      this.presentUserFlag = true
     } catch (e) {
-      alert(e);
+      console.log("Erro: "+ e.message +" ou nenhum cliente logado");
     }
     this.items[2].label = Object.keys(this.$store.state.tableProductsOnCart).length
   },
@@ -78,6 +88,11 @@ export default {
     ...mapActions([
       'showModalCart',
     ]),
+    logout(){
+      localStorage.removeItem('token');
+      this.items[0].nameUser = "cliente"
+      this.presentUserFlag = false
+    }
   }
 };
 </script>
@@ -85,7 +100,7 @@ export default {
 <style scoped>
 .navbar {
   background-color: #333;
-}
+} 
 .nav-left {
   position: relative;
   float: left;
@@ -121,14 +136,9 @@ export default {
   align-items: center;
   align-content: center;
 }
-.nav-item:nth-child(2) {
-}
 
-.nav-item {
-}
-.nav-item:first-child {
-  /* margin-right: 50px;
-  margin-left: 50px; */
+.button-nav{
+  margin-left: 20px;
 }
 
 .logo-image {

@@ -5,14 +5,19 @@
       <!-- <FiltroProdutos class="filtro"/> -->
     </div>
     <div>
-      <div class="carousel">
+      <!-- <div class="carousel">
         <HomeCarroussel />
-      </div>
-      <div class="container ">
+      </div>-->
+      <div class="container">
         <div class="row produtos">
-          <div  class="card" v-for="(item,index) in tableDataProdutos" :key="index">
+          <div class="card" v-for="(item,index) in tableDataProdutos" :key="index">
             <div class="col">
-              <CardProdutos :id="item.id" :nomeProduto="item.nome" :precoProduto="item.preco" :imageUrl="item.imageUrl"/>
+              <CardProdutos
+                :id="item.id"
+                :nomeProduto="item.nome"
+                :precoProduto="item.preco"
+                :imageUrl="item.imageUrl"
+              />
             </div>
           </div>
         </div>
@@ -24,76 +29,73 @@
 <script>
 // import FiltroProdutos from '../components/FiltroProdutos'
 // import NavbarUser from "../components/user/NavbarUser";
-import HomeCarroussel from "../components/HomeCarroussel";
+// import HomeCarroussel from "../components/HomeCarroussel";
 import CardProdutos from "../components/CardProduto";
-import Produto from "../services/produto"
-import Categorias from "../services/categoria"
-import {mapState, mapActions, mapGetters} from 'vuex'
+import Produto from "../services/produto";
+import Categorias from "../services/categoria";
+import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   name: "HomeUser",
   components: {
     // NavbarUser,
-    HomeCarroussel,
-    CardProdutos,
+    // HomeCarroussel,
+    CardProdutos
     // FiltroProdutos,
   },
-  computed:{
+  computed: {
     ...mapState({
       tableDataProdutos: state => state.tableDataProdutos
     }),
-    ...mapGetters({
-      listaProdutos: 'getTableDataProdutos'
-    })
+    ...mapGetters(["getTableDataProdutos"])
   },
 
   data() {
     return {
-      idsCategoria:[],
+      idsCategoria: []
     };
   },
   methods: {
-    ...mapActions([
-      'setObjToTableDataProdutos'
-    ]),
-     
+    ...mapActions(["setObjToTableDataProdutos"])
   },
 
-  async mounted(){
-    try{
-      const res = await Categorias.getAll();
-      
-      if(Object.keys(res.data) != 0){
-        res.data.forEach(element =>{
-          this.idsCategoria.push(element.id)
-        })
+  async created() {
+    if (this.getTableDataProdutos.length == 0) {
+      try {
+        const res = await Categorias.getAll();
+
+        if (Object.keys(res.data) != 0) {
+          res.data.forEach(element => {
+            this.idsCategoria.push(element.id);
+          });
+        }
+      } catch (e) {
+        alert(e);
+      }
+      try {
+        const res = await Produto.getAll();
+
+        if (Object.keys(res).length != 0) {
+          res.data.content.forEach(element => {
+            console.log(element.imageUrl);
+
+            this.$store.state.tableDataProdutos.push({
+              id: element.id,
+              nome: element.nome,
+              preco: element.preco,
+              imageUrl: element.imageUrl
+            });
+          });
+        }
+      } catch (e) {
+        alert(e);
       }
     }
-    catch(e){
-      alert(e)
-    }
-    try{
-      const res = await Produto.getAll();
-      
-      if(Object.keys(res).length != 0){
-        res.data.content.forEach(element => {
-          console.log(element.imageUrl);
-          
-          this.$store.state.tableDataProdutos.push({id: element.id, nome: element.nome, preco: element.preco, imageUrl: element.imageUrl})
-          
-        });
-      }
-    }
-    catch(e){
-      alert(e)
-    }
-    
-    
   }
 };
 </script>
 
 <style scoped>
-.filtro{
+.filtro {
   padding-top: 50px;
 }
 .navb {
@@ -102,10 +104,10 @@ export default {
   top: 0;
   width: 100%;
 }
-.card{
-    padding: 10px;
-    background-color: transparent;
-    border-color: transparent;
+.card {
+  padding: 10px;
+  background-color: transparent;
+  border-color: transparent;
 }
 .carousel {
   padding-top: 200px;
@@ -115,10 +117,9 @@ export default {
   background-color: #f4f4f4;
   height: 100%;
 }
-.produtos{
-    margin-top: 100px;
-    display: flex;
-    justify-content: center;
+.produtos {
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
 }
-
 </style>

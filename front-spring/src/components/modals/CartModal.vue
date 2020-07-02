@@ -1,5 +1,5 @@
 <template>
-  <transition name="appear">
+  
     <div id="cart" class="modal-container">
       <div class="modal-cart">
         <div class="item-cart" v-for="(produto,index) in getProductsOnCart" :key="index">
@@ -14,10 +14,11 @@
         </div>
         <span v-if="getProductsOnCart.length > 0" class="total-cart">Total:{{total()}}</span>
         <span v-if="getProductsOnCart.length == 0" class="total-cart">Nenhum produto no carrinho</span>
-        <b-button v-if="getProductsOnCart.length > 0" class="button-cart">CARRINHO</b-button>
+        <router-link  :to="`/finalizar-compra`">
+          <b-button v-if="getProductsOnCart.length > 0" class="button-cart" @click="showModalCart">CARRINHO</b-button>
+        </router-link>
       </div>
-    </div>
-  </transition>
+    </div> 
 </template>
 
 <script>
@@ -61,9 +62,9 @@ export default {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  position: fixed;
+  position: absolute;
   top: 0px;
-  z-index: 200;
+  z-index: 1;
   left: 0px;
   display: flex;
   justify-content: flex-end;
@@ -124,20 +125,5 @@ export default {
   position: absolute;
   left: 10%;
 }
-.appear-enter-active {
-  animation: appear-animation .5s;
-}
-.appear-leave-active {
-  animation: appear-animation .5s reverse;
-}
-@keyframes appear-animation {
-  0% {
-    transform: translateY(-50%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0%);
-    opacity: 1;
-  }
-  }
+
 </style>

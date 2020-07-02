@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Alert :message="alertBody.message" :type="alertBody.type" :visible="visible" />
+    <Alert :message="alertBody.message" :type="alertBody.type" />
 
     <b-modal id="modal-delete1" title="Tem certeza que deseja deletar" @ok="handleDelete()">
       <p class="my-4"></p>
@@ -8,12 +8,12 @@
 
     <SaveCategoriaModal @emit-click="insertListner" />
 
-    <div class="container-list">
-      <div class="container-title">
-        <h1 class="title">Lista de categorias</h1>
-        <b-button class="title button-title" @click="showModalSave()">Adicionar</b-button>
+    <div class="container-list container">
+      <div class="header">
+        <h1 class="title-header">Lista de Categorias</h1>
+        <b-button class="title btn-add"  variant="primary" @click="showModalSave()">Adicionar</b-button>
       </div>
-      <div class="list-categoria">
+      <div class="table-container">
         <b-table :items="tableData" :fields="fields" striped responsive="sm" :busy="isBusy">
 
           <template v-slot:cell(opções)="row">
@@ -59,7 +59,6 @@ export default {
       ],
       isBusy: false,
       tableData: [],
-      visible: null,
       alertBody: {
         message: "",
         type: ""
@@ -188,6 +187,9 @@ export default {
   align-items: center;
   justify-content: center;
 }
+.table-container{
+  width: 100%;
+}
 .title {
   display: inline;
 }
@@ -200,13 +202,25 @@ export default {
   cursor: pointer;
   margin: 5px;
 }
+.header {
+  width: 80%;
+  flex-direction: row;
+  display: flex;
+}
+.btn-add{
+  position : relative; 
+  margin-left: auto;
+}
+.title-header{
+  position: relative;
+  margin-left: auto;
+}
 .container-list {
+  padding-top: 5%;
   flex-direction: column;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.list-categoria {
-  width: 50%;
-}
+
 </style>

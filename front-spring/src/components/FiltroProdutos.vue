@@ -68,7 +68,7 @@ export default {
     },
     boldItem(index, idItem) {
       const item = document.getElementsByClassName("item-nav");
-
+      //getCompútedStyle pega todos os syles do elemento
       const styleItem = window.getComputedStyle(item[index]).getPropertyValue('font-weight')
       
         

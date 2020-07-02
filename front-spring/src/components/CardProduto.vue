@@ -8,8 +8,14 @@
           <img class="card-img-top" :src="imageUrl" alt="Card-image">
 
           <div class="card-body">
-            <h5 class="card-title">{{nomeProduto}}</h5>
-            <p class="card-text">12X de 74,91 sem juros</p>
+            <h5 align="left" class="card-title">{{nomeProduto}}</h5>
+            <div class="preco-produto">
+              <p>{{precoProduto.toLocaleString("pt-br", {
+        style: "currency",
+        currency: "BRL"
+      })}}</p>
+              <p class="card-text teste">12X de 74,91</p>
+            </div>
           </div>
         </router-link>
         <a class="btn btn-primary" @click="handleBag()">Carrinho</a>
@@ -68,14 +74,16 @@ export default {
 </script>
 
 <style scoped>
-.preco-produto {
-  font-weight: bold;
-  font-size: 20px;
+.card-body{
+  padding-bottom: 0.2em;
 }
-.nome-produto {
+.preco-produto {
+  display: flex;
+  font-weight: bold;
   font-size: 15px;
 }
-.descricao {
-  font-size: 11px;
+.teste{
+  margin-left: auto;
 }
+
 </style>

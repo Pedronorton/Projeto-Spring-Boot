@@ -26,6 +26,13 @@
         </div>
 
         <div class="form-group row">
+          <label for="inputPassword3" class="col-sm-2 col-form-label">Senha</label>
+          <div class="col-sm-10">
+            <input class="form-control" v-model="saveItem.senha" />
+          </div>
+        </div>
+
+        <div class="form-group row">
           <label for="inputEmail3" class="col-sm-2 col-form-label">Telefone</label>
           <div class="col-sm-10">
             <input class="form-control" v-model="saveItem.telefone1" />
@@ -99,7 +106,7 @@ export default {
       saveItem: {
         nome: "",
         cpfOuCnpj: "",
-        senha:"123",
+        senha:"",
         email: "",
         tipo: null,
         telefone1: "",

@@ -73,8 +73,7 @@ export default {
         } catch (e) {
 
         alert("Erro ao logar")
-        
-        // alert("Erro ao logar !");
+  
       }
       this.$store.dispatch('changeLoading')
     }

@@ -3,7 +3,9 @@
       <div>
           <NavbarUser class="navb"/>
           <FiltroProdutos/>
-          <CartModal v-if="getPopupCart"/>
+          <transition name="appear">
+            <CartModal class="cart" v-if="getPopupCart"/>
+          </transition>
       </div>
 
     <router-view></router-view>
@@ -57,4 +59,26 @@ export default {
 };
 </script>
 <style>
+.navb{
+  position: fixed;
+}
+.cart{
+  position: absolute;
+}
+.appear-enter-active {
+  animation: appear-animation .5s;
+}
+.appear-leave-active {
+  animation: appear-animation .5s reverse;
+}
+@keyframes appear-animation {
+  0% {
+    transform: translateY(-50%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
 </style>

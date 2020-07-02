@@ -1,16 +1,15 @@
 <template>
   <div>
-    <Alert class="teste" :message="alertBody.message" :type="alertBody.type" :visible="visible" />
+    <Alert class="teste" :message="alertBody.message" :type="alertBody.type" />
 
     <b-modal id="delete-modal" title="Tem certeza que deseja deletar o item ?" @ok="handleDelete()"></b-modal>
 
     <SaveUsuarioModal @emit-click="insertListner" />
   
-    <div class="container-list">
-      <div class="container-header">
-        <h1>Lista de Clientes</h1>
-        <b-button class="title button-title" v-b-modal.modal-save>Adicionar</b-button>
-
+    <div class="container-list container">
+      <div class="header">
+        <h1 class="title-header">Lista de Clientes</h1>
+        <b-button class="title btn-add" variant="primary" v-b-modal.modal-save>Adicionar</b-button>
       </div>
       <div>
         <b-table :items="tableData" :fields="fields" striped responsive="sm" :busy="isBusy">
@@ -86,8 +85,6 @@ export default {
         message: "",
         type: ""
       },
-      visible: null,
-      
       
       tableDataCidade: [],
       
@@ -202,27 +199,29 @@ export default {
 </script>
 
 <style scoped>
-.container-header {
+.header {
+  width: 80%;
   flex-direction: row;
   display: flex;
 }
-.navb {
-  width: 100%;
-  top: 0;
-  position: absolute;
+.btn-add{
+  position : relative; 
+  margin-left: auto;
+}
+.title-header{
+  position: relative;
+  margin-left: auto;
 }
 .element-categoria {
   cursor: pointer;
   margin: 5px;
 }
 .container-list {
+  padding-top: 5%;
   flex-direction: column;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.list-categoria {
-  width: 50%;
 }
 .icons {
   left: 0;
