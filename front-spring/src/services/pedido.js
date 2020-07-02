@@ -16,7 +16,13 @@ const getAll = () => {
 }
 
 const post = (data) => {
-    return Api().post('/pedidos', data)
+    let token = localStorage.getItem('token')
+    const config = {
+        headers: {
+            Authorization: "Bearer "+token
+        }
+    }
+    return Api().post('/pedidos', data, config)
 }
 
 export default {

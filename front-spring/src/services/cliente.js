@@ -13,11 +13,25 @@ const post = (data) => {
 }
 
 const del = (id) => {
-    return Api().delete(`/clientes/${id}`)
+    let token = localStorage.getItem('token')
+
+    const config = {
+        headers: {
+            Authorization: "Bearer "+token
+        }
+    }
+    return Api().delete(`/clientes/${id}`, config)
 }
 
 const put = (id,data) => {
-    return Api().put(`/clientes/${id}`,data)
+    let token = localStorage.getItem('token')
+
+    const config = {
+        headers: {
+            Authorization: "Bearer "+token
+        }
+    }
+    return Api().put(`/clientes/${id}`,data, config)
 }
 
 const getUserAutenticated = () => {

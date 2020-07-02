@@ -10,7 +10,10 @@ export default new Vuex.Store({
       time: 0,
       auth:"",
       isLoading: false,
-      tableDataProdutos:[]
+      tableDataProdutos:[],
+      allIdsCategorias:[],
+      tableProductsOnCart:[],
+      showPopupCart: false,
     },
     mutations: {
       setTime(state, value){
@@ -31,12 +34,29 @@ export default new Vuex.Store({
       setObjToTableDataProdutos(state, obj){
         state.tableDataProdutos.push(obj)
       },
+      setIdCategoria(state, obj){
+        state.allIdsCategorias.push(obj)
+      },
+      setProductOnCart(state, obj){
+        state.tableProductsOnCart.push(obj)
+      },
+      showModalCart: (state) => {        
+        state.showPopupCart = !state.showPopupCart;
+      },
+      removeProductOnCart: (state,index) => {
+        state.tableProductsOnCart.splice(index,1)
+      }
       
     },
     getters: {
-      getTableDataProdutos(state){
-        return state.tableDataProdutos;
-      }
+      getTableDataProdutos: state => state.tableDataProdutos,
+      getAllIdsCategorias(state){
+        return state.allIdsCategorias;
+      },
+
+      getProductsOnCart: state => state.tableProductsOnCart,
+      getPopupCart: state => state.showPopupCart,
+
     },
     actions: { 
       setTime(context, value){
@@ -53,6 +73,15 @@ export default new Vuex.Store({
       },
       setObjToTableDataProdutos(context){
         context.commit('setObjToTableDataProdutos')
+      },
+      setProductOnCart(context){
+        context.commit('setProductOnCart')
+      },
+      showModalCart: (context) => {
+        context.commit('showModalCart');
+      },
+      removeProductOnCart: (context, index) =>{
+        context.commit('removeProductOnCart',index)
       }
     },
     modules: {}

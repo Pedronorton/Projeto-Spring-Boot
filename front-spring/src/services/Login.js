@@ -1,10 +1,21 @@
 import Api from './config'
 
     const post = (data) => {
-    
-        return Api().post('/login', data);
+        const config = {
+            headers: {
+                "content-Type": "multipart/form-data"
+            }
+        }
+        return Api().post('/login', data, config);
     }
-
+    // const post = (data) => {
+    //     const config = {
+    //         headers: {
+    //             "content-Type": "multipart/form-data"
+    //         }
+    //     }
+    //     return Api().post('/login', data, config);
+    // }
     export default {
         post,
     }

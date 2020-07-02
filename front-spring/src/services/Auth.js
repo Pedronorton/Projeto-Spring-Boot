@@ -16,7 +16,17 @@ export default {
         }
     
         const res = await  Api().get("auth/user", config)
-        return res.data
+        var flag = false;
+        if(Object.keys(res.data) != 0){
+            res.data.forEach(element => {
+                if(element.authority == "ROLE_ADMIN"){
+                    flag = true;
+                }
+            })
+        }
+        if(flag == true){
+            return "ROLE_ADMIN"
+        }
     },
 
     async isValidToken() {

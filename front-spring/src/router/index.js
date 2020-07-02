@@ -16,6 +16,7 @@ import LoginUser from "../components/user/LoginUser"
 import EsqueciSenha from "../components/user/EsqueciSenha"
 import DetalhesProduto from "../components/user/DetalhesProduto"
 import FecharCompra from "../components/user/FecharCompra"
+import UserRouter from "../components/user/UserRouter"
 Vue.use(Router)
 
 export default new Router({
@@ -28,20 +29,27 @@ export default new Router({
     },
     {
       path: '/',
-      name: 'HomeUser',
-      component: HomeUser,
-    },
-    {
+      name: 'UserRouter',
+      component: UserRouter,
+      children:[
+        {
+          path: '/',
+          name: 'HomeUser',
+          component: HomeUser,
+        },
+        {
       
-      path: '/detalhes-produtos/:id',
-      name: 'DetalhesProduto',
-      component: DetalhesProduto,
-    },
-    {
+          path: '/detalhes-produtos/:id',
+          name: 'DetalhesProduto',
+          component: DetalhesProduto,
+        },
+        {
       
-      path: '/finalizar-compra',
-      name: 'FecharCompra',
-      component: FecharCompra,
+          path: '/finalizar-compra',
+          name: 'FecharCompra',
+          component: FecharCompra,
+        },
+      ]
     },
     {
       path: '/login-user',
@@ -59,12 +67,9 @@ export default new Router({
       name:"AdminRouter",
       component:AdminRouter , 
       async beforeEnter(to, from, next) {
-        if(await Auth.isValidToken() == true){
-          if(await Auth.getUser() == "ADMIN"){
-            next()
-          }else{
-            alert("Acesso negado")
-          }
+        const user = await Auth.getUser();
+        if(user == "ROLE_ADMIN"){
+          next();
         }else{
           alert("Usuário ou senhas errados")
           next("/login")
