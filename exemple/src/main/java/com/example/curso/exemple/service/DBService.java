@@ -103,20 +103,20 @@ public class DBService {
         estadoRepository.saveAll(Arrays.asList(est1,est2));
         cidadeRepository.saveAll(Arrays.asList(c1,c2,c3));
         //lufelipini@gmail.com
-        Cliente cli1 = new Cliente("Maria Silva","p.paiva.pdo@gmail.com","1111", TipoCliente.PESSOAFISICA, pe.encode("123"));
+        Cliente cli1 = new Cliente("Maria Silva","user@gmail.com","11169590624", TipoCliente.PESSOAFISICA, pe.encode("123"));
         cli1.getTelefones().addAll(Arrays.asList("3333","5555"));
 
-        Cliente cli2 = new Cliente("Maria Silva","pedro.paiva.pdo@gmail.com","1111", TipoCliente.PESSOAFISICA, pe.encode("123"));
+        Cliente cli2 = new Cliente("Ademar","admin@gmail.com","11169590624", TipoCliente.PESSOAFISICA, pe.encode("123"));
         cli2.getTelefones().addAll(Arrays.asList("32412004","5555"));
         cli2.addPerfil(Perfil.ADMIN);
 
-        Cliente cli3 = new Cliente("Cliente teste","pp@gmail.com","1111", TipoCliente.PESSOAFISICA, pe.encode("123"));
+        Cliente cli3 = new Cliente("Cliente teste","ll@gmail.com","11169590624", TipoCliente.PESSOAFISICA, pe.encode("123"));
         cli3.getTelefones().addAll(Arrays.asList("3333","5555"));
 
 
         Endereco e1 = new Endereco("Rua flores","33","casa","centro", "37490000", cli1, c1);
-        Endereco e2 = new Endereco("Av primavera", "99", "casa", "centro", "37490000", cli1, c2);
-        Endereco e3 = new Endereco("Av rebouças", "99", "casa", "centro", "37490000", cli2, c2);
+        Endereco e2 = new Endereco("Av dos peixes", "99", "casa", "centro", "37490000", cli1, c2);
+        Endereco e3 = new Endereco("Av dos tubarões", "99", "casa", "centro", "37490000", cli2, c2);
         Endereco e4 = new Endereco("Av teste", "99", "casa", "centro", "37490000", cli3, c2);
 
 
