@@ -23,13 +23,13 @@
     <div class="nav-right">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <b-button variant="primary" @click="showModalCart">
+          <b-button id="button-modal-cart" class="button-nav" variant="primary" @click="showModalCart">
             Carrinho
             <b-badge variant="dark">{{getProductsOnCart.length}}</b-badge>
           </b-button>
         </li>
         <li class="nav-item">
-          <b-button class ="button-nav" variant="primary" v-if="!presentUserFlag" href="/login-user">
+          <b-button id="btn-login" class ="button-nav" variant="primary" v-if="!presentUserFlag" href="/login-user">
             Login
           </b-button>
           <b-button class="button-nav" variant="primary" v-if="presentUserFlag" @click="logout()">
@@ -139,9 +139,27 @@ export default {
 
 .button-nav{
   margin-left: 20px;
+  background-color: #A40606;
+  border-color: #A40606;
+}
+.button-nav:hover{
+  background-color: #710000;
+  border-color: #710000;
 }
 
 .logo-image {
   width: 100px;
+}
+.logo-image:hover{
+  animation: test 2s;
+}
+
+@keyframes test {
+  0% {
+    transform: rotate(0deg);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
 }
 </style>

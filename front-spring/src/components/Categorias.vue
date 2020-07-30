@@ -17,8 +17,8 @@
         <b-table :items="tableData" :fields="fields" striped responsive="sm" :busy="isBusy">
 
           <template v-slot:cell(opções)="row">
-            <b-icon class="icon" icon="trash-fill" aria-hidden="true" @click="showModalDelete(row.item)" ></b-icon>
-            <b-icon class="icon" icon="pencil" aria-hidden="true" @click="row.toggleDetails"></b-icon>
+            <b-icon name="deletar" class="icon" icon="trash-fill" aria-hidden="true" @click="showModalDelete(row.item)" ></b-icon>
+            <b-icon name="editar" class="icon" icon="pencil" aria-hidden="true" @click="row.toggleDetails"></b-icon>
           </template>
     
           <template v-slot:row-details="row" v-slot:table-busy>
@@ -30,11 +30,11 @@
                 </b-form-group>
 
                 <b-form-group>
-                  <b-input v-model="row.item.nome"></b-input>
+                  <b-input name="nome" v-model="row.item.nome"></b-input>
                 </b-form-group>
 
               </b-form>
-              <b-button size="sm" @click="handleEdit(row.item)" variant="primary">Salvar</b-button>
+              <b-button name="salvar" size="sm" @click="handleEdit(row.item)" variant="primary">Salvar</b-button>
             </b-card>
           </template>
         </b-table>

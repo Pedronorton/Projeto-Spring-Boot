@@ -2,7 +2,7 @@
   <div>
     <div class="row justify-content-center">
       <div>
-        <div class="card" style="max-width: 20rem; max-heigth: 20rem">
+        <div class="card product-card" style="max-width: 20rem; max-heigth: 20rem">
         <router-link class="card-blog-link" :to="`/detalhes-produtos/${id}`">
 
           <img class="card-img-top" :src="imageUrl" alt="Card-image">
@@ -18,7 +18,7 @@
             </div>
           </div>
         </router-link>
-        <a class="btn btn-primary" @click="handleBag()">Carrinho</a>
+        <a id="link-cart" class="btn btn-primary" @click="handleBag()">Carrinho</a>
 
         </div>
       </div>

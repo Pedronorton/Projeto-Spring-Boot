@@ -5,66 +5,66 @@
 
       <form>
         <div class="form-group row">
-          <label for="inputEmail3" class="col-sm-2 col-form-label">Nome</label>
+          <label  class="col-sm-2 col-form-label">Nome</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" v-model="saveItem.nome" />
+            <input name="nome" type="text" class="form-control" v-model="saveItem.nome" />
           </div>
         </div>
 
         <div class="form-group row">
-          <label for="inputEmail3" class="col-sm-2 col-form-label">CPF/CNPJ</label>
+          <label  class="col-sm-2 col-form-label">CPF/CNPJ</label>
           <div class="col-sm-10">
-            <input class="form-control" v-model="saveItem.cpfOuCnpj" />
+            <input name="cpf/cnpj" class="form-control" v-model="saveItem.cpfOuCnpj" />
           </div>
         </div>
 
         <div class="form-group row">
-          <label for="inputPassword3" class="col-sm-2 col-form-label">Email</label>
+          <label class="col-sm-2 col-form-label">Email</label>
           <div class="col-sm-10">
-            <input class="form-control" v-model="saveItem.email" />
+            <input name="email" class="form-control" v-model="saveItem.email" />
           </div>
         </div>
 
         <div class="form-group row">
-          <label for="inputPassword3" class="col-sm-2 col-form-label">Senha</label>
+          <label  class="col-sm-2 col-form-label">Senha</label>
           <div class="col-sm-10">
-            <input class="form-control" v-model="saveItem.senha" />
+            <input name="senha" class="form-control" v-model="saveItem.senha" />
           </div>
         </div>
 
         <div class="form-group row">
-          <label for="inputEmail3" class="col-sm-2 col-form-label">Telefone</label>
+          <label  class="col-sm-2 col-form-label">Telefone</label>
           <div class="col-sm-10">
-            <input class="form-control" v-model="saveItem.telefone1" />
+            <input name="telefone" class="form-control" v-model="saveItem.telefone1" />
           </div>
         </div>
 
         <div class="form-group row">
-          <label for="inputEmail3" class="col-sm-2 col-form-label">Cidade</label>
+          <label  class="col-sm-2 col-form-label">Cidade</label>
           <div class="col-sm-10">
-            <b-form-input
+            <!-- <b-form-input
               placeholder="Selecione uma cidade"
               list="my-list-id"
               v-model="cidade_nome"
-            ></b-form-input>
-
-            <datalist id="my-list-id">
-              <option v-for="(cidade,index) in tableDataCidade" v-bind:key="index">{{ cidade.nome }}</option>
-            </datalist>
+            ></b-form-input> -->
+            <b-form-select name="cidade" v-model="cidade_nome" :options="tableDataCidade"></b-form-select>
+            <!-- <datalist id="my-list-id" >
+              <option  v-for="(cidade,index) in tableDataCidade" v-bind:key="index">{{ cidade.nome }}</option>
+            </datalist> -->
           </div>
         </div>
 
         <div class="form-group row">
-          <label for="inputEmail3" class="col-sm-2 col-form-label">Logradouro</label>
+          <label  class="col-sm-2 col-form-label">Logradouro</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" v-model="saveItem.logradouro" />
+            <input name="logradouro" type="text" class="form-control" v-model="saveItem.logradouro" />
           </div>
         </div>
 
         <div class="form-group row">
-          <label for="inputEmail3" class="col-sm-2 col-form-label">Cep</label>
+          <label  class="col-sm-2 col-form-label">Cep</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" v-model="saveItem.cep" />
+            <input name="cep" type="text" class="form-control" v-model="saveItem.cep" />
           </div>
         </div>
 
@@ -75,6 +75,7 @@
               <div class="form-check">
                 <div>
                   <b-form-radio-group
+                    id="radio-group"
                     v-model="selectedCity"
                     :options="options"
                     class="mb-3"
@@ -135,9 +136,11 @@ export default {
 
       res.data.forEach(element => {
         const temp = {
-          id: element.id,
-          nome: element.nome,
-          estado: element.estado.nome
+          text: element.nome,
+          value: element,
+          // id: element.id,
+          // nome: element.nome,
+          // estado: element.estado.nome
         };
 
         this.tableDataCidade.push(temp);
@@ -147,8 +150,9 @@ export default {
     ...mapActions(["setTime"]),
     async handleSave() {
         try{
-        const res = await Cidade.getId(this.cidade_nome)
-
+        const res = await Cidade.getId(this.cidade_nome.nome)
+        console.log(this.cidade_nome.nome);
+        // console.log(res);
         this.saveItem.cidade_id = res.data.id
         this.saveItem.tipo = this.selectedCity
 

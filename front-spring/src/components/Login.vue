@@ -11,16 +11,16 @@
         <div>
           <b-form>
             <b-form-group>
-              <b-input placeholder="email" v-model="login.email"></b-input>
+              <b-input id="input-login" placeholder="email" v-model="login.email"></b-input>
             </b-form-group>
             <b-form-group>
-              <b-input placeholder="senha" type="password" v-model="login.senha"></b-input>
+              <b-input id="input-password" placeholder="senha" type="password" v-model="login.senha"></b-input>
             </b-form-group>
           </b-form>
           <div>
               <b-overlay :show="isLoading" :opacity="opacity" :variant="variant"></b-overlay>
 
-            <b-button @click="handleLogin()">
+            <b-button id="btn-login" @click="handleLogin()">
               LOGAR
             </b-button>
           </div>

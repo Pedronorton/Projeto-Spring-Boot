@@ -5,9 +5,9 @@
       <!-- <FiltroProdutos class="filtro"/> -->
     </div>
     <div>
-      <!-- <div class="carousel">
+      <div class="carousel">
         <HomeCarroussel />
-      </div>-->
+      </div>
       <div class="container">
         <div class="row produtos">
           <div class="card" v-for="(item,index) in tableDataProdutos" :key="index">
@@ -29,7 +29,7 @@
 <script>
 // import FiltroProdutos from '../components/FiltroProdutos'
 // import NavbarUser from "../components/user/NavbarUser";
-// import HomeCarroussel from "../components/HomeCarroussel";
+import HomeCarroussel from "../components/HomeCarroussel";
 import CardProdutos from "../components/CardProduto";
 import Produto from "../services/produto";
 import Categorias from "../services/categoria";
@@ -38,7 +38,7 @@ export default {
   name: "HomeUser",
   components: {
     // NavbarUser,
-    // HomeCarroussel,
+    HomeCarroussel,
     CardProdutos
     // FiltroProdutos,
   },
@@ -109,10 +109,6 @@ export default {
   background-color: transparent;
   border-color: transparent;
 }
-.carousel {
-  padding-top: 200px;
-}
-
 .home {
   background-color: #f4f4f4;
   height: 100%;

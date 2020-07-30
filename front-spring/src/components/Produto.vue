@@ -15,8 +15,9 @@
       <div class="list-categoria">
         <b-table :items="tableData" :fields="fields" striped responsive="sm" :busy="isBusy">
           <template v-slot:cell(opções)="row">
-            <b-icon class="icon" icon="trash-fill" aria-hidden="true" @click="showModal(row.item)"></b-icon>
+            <b-icon name="deletar" class="icon" icon="trash-fill" aria-hidden="true" @click="showModal(row.item)"></b-icon>
             <b-icon
+              name="editar"
               class="icon"
               icon="pencil"
               aria-hidden="true"
@@ -34,7 +35,7 @@
                 </b-form-group>
 
                 <b-form-group>
-                  <b-input v-model="row.item.preco"></b-input>
+                  <b-input name="preco" v-model="row.item.preco"></b-input>
                 </b-form-group>
 
                 <b-form-tags size="lg" add-on-change no-outer-focus class="mb-2">
@@ -43,7 +44,7 @@
                       <b-form-tag @remove="removeTag(tag)" variant="info">{{ tag.text }}</b-form-tag>
                     </li>
                   </ul>
-                  <b-form-select v-model="selectedOptionTags" :options="options">
+                  <b-form-select id="tags" v-model="selectedOptionTags" :options="options">
                     <template v-slot:first>
                       <!-- This is required to prevent bugs with Safari -->
                       <option disabled value>Escolha as categorias relacionadas</option>
@@ -52,6 +53,7 @@
                 </b-form-tags>
                 <b-form-group label="Imagem do produto">
                   <b-form-file
+                    name="file"
                     v-model="row.item.imageUrl"
                     :state="Boolean(row.item.imageUrl)"
                     placeholder="Choose a file or drop it here..."
@@ -60,7 +62,7 @@
                 </b-form-group>
               </b-form>
 
-              <b-button size="sm" @click="handleEdit(row.item)" variant="primary">Salvar</b-button>
+              <b-button name="salvar" size="sm" @click="handleEdit(row.item)" variant="primary">Salvar</b-button>
             </b-card>
           </template>
         </b-table>

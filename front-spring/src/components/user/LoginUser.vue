@@ -9,12 +9,12 @@
         <b-form-group>
           <h1 class="title">Fazer Login</h1>
           <div class="div-input">
-            <b-input v-model="login.email" class="input" placeholder="Email"></b-input>
+            <b-input id="input-login" v-model="login.email" class="input" placeholder="Email"></b-input>
           </div>
         </b-form-group>
         <b-form-group>
           <div class="div-input">
-            <b-input v-model="login.senha" class="input" placeholder="Senha" type="password"></b-input>
+            <b-input id="input-password" v-model="login.senha" class="input" placeholder="Senha" type="password"></b-input>
           </div>
         </b-form-group>
         <b-form-group>

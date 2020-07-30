@@ -15,7 +15,7 @@
         <span v-if="getProductsOnCart.length > 0" class="total-cart">Total:{{total()}}</span>
         <span v-if="getProductsOnCart.length == 0" class="total-cart">Nenhum produto no carrinho</span>
         <router-link  :to="`/finalizar-compra`">
-          <b-button v-if="getProductsOnCart.length > 0" class="button-cart" @click="showModalCart">CARRINHO</b-button>
+          <b-button id="button-cart" v-if="getProductsOnCart.length > 0" class="button-cart" @click="showModalCart">CARRINHO</b-button>
         </router-link>
       </div>
     </div> 

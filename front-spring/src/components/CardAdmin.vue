@@ -3,7 +3,8 @@
     <div class="col">
       <b-card-group deck class="card-admin">
         <b-card
-          bg-variant="success"
+          
+          :name="title"
           header-tag="header"
           footer="Ver mais"
           footer-tag="footer"
@@ -48,8 +49,20 @@ export default {
 .card-admin{
     cursor: pointer;
 }
-.icon:hover {
-  width: 15%;
-  height: 15%;
+.card{
+  background-color: #47A0FF;
+}
+.card-admin:hover{
+  animation: grow-up 0.5s;
+  transform: scale(1.2);
+}
+
+@keyframes grow-up {
+  0%{
+    transform: scale(1);
+  }
+  100%{
+    transform: scale(1.2);
+  }
 }
 </style>

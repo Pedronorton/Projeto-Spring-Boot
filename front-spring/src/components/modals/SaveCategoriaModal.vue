@@ -4,7 +4,7 @@
       <div>
         <b-form>
           <b-form-group label="Nome">
-            <b-input v-model="saveItem.nome"></b-input>
+            <b-input name="categoria" v-model="saveItem.nome"></b-input>
           </b-form-group>
         </b-form>
       </div>

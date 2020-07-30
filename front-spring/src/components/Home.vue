@@ -17,8 +17,6 @@
 
 <script>
 import {mapGetters} from "vuex"
-// import Sidebar from './Sidebar'
-// import Navbar from "../components/Navbar";
 import CardAdmin from "../components/CardAdmin";
 import Cliente from "../services/cliente"
 import Produto from "../services/produto"
@@ -28,9 +26,7 @@ export default {
   
   name: "Home",
   components: {
-    // Navbar,
     CardAdmin,
-    // Sidebar
   },
   data() {
     return {
@@ -129,9 +125,7 @@ export default {
 </script>
 
 <style scoped>
-.teste{
-  background-color: blue;
-}
+
 .max-width{
   display: flex;
   justify-content: center;

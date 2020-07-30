@@ -5,11 +5,11 @@
 
       <form ref="form">
         <b-form-group label="Nome">
-          <b-form-input v-model="saveItem.nome"></b-form-input>
+          <b-form-input name="nome" v-model="saveItem.nome"></b-form-input>
         </b-form-group>
 
         <b-form-group label="Preço">
-          <b-form-input v-model="saveItem.preco"></b-form-input>
+          <b-form-input name="preco" v-model="saveItem.preco"></b-form-input>
         </b-form-group>
 
         <b-form-tags size="lg" add-on-change no-outer-focus class="mb-2">
@@ -18,7 +18,7 @@
               <b-form-tag @remove="removeTag(tag)" variant="info">{{ tag.text }}</b-form-tag>
             </li>
           </ul>
-          <b-form-select v-model="selectedOptionTags" :options="options">
+          <b-form-select id="tags" v-model="selectedOptionTags" :options="options">
             <template v-slot:first>
               <!-- This is required to prevent bugs with Safari -->
               <option disabled value>Escolha as categorias relacionadas</option>
@@ -27,6 +27,7 @@
         </b-form-tags>
         <b-form-group label="Imagem do produto">
           <b-form-file
+            name="file"
             v-model="saveItem.imageUrl"
             :state="Boolean(saveItem.imageUrl)"
             placeholder="Escolha uma imagem..."

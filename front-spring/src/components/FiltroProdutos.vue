@@ -2,6 +2,7 @@
   <nav class="menu">
     <ul>
       <li
+        :name="item.nome"
         class="item-nav"
         v-for="(item,index) in items"
         :key="index"
@@ -70,7 +71,6 @@ export default {
       const item = document.getElementsByClassName("item-nav");
       //getCompútedStyle pega todos os syles do elemento
       const styleItem = window.getComputedStyle(item[index]).getPropertyValue('font-weight')
-      
         
       if (styleItem == 400) { //normal font
         this.searchByIds.push(idItem)
@@ -91,22 +91,28 @@ export default {
 
 <style scoped>
 .item-nav {
+  font-size: 17px;
   display: inline;
   margin-right: 15px;
   cursor: pointer;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  
 }
 .item-nav:hover {
   position: relative;
 }
 .item-nav:hover::after {
   content: "";
-  background-color: blue;
-  width: 50%;
+  background-color: #A40606;
+  width: 90%;
   height: 20%;
   position: absolute;
-  top: 60%;
+  top: 70%;
   left: 5%;
   z-index: 0;
+  -moz-animation: swing .2s ease-out !important;
+  animation: swing .2s ease-out !important;
+  -webkit-animation: swing .2s ease-out !important;
 }
 .item-nav:hover {
 }
@@ -116,4 +122,28 @@ export default {
   align-items: center;
   justify-content: center;
 }
+@keyframes swing
+{
+    15%
+    {
+        -webkit-transform: translateX(5px);
+        transform: translateX(5px);
+    }
+    50%
+    {
+        -webkit-transform: translateX(3px);
+        transform: translateX(3px);
+    }
+    80%
+    {
+        -webkit-transform: translateX(2px);
+        transform: translateX(2px);
+    }
+    100%
+    {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+    }
+}
+
 </style>

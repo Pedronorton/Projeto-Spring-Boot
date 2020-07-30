@@ -3,9 +3,7 @@ import Router from 'vue-router'
 import Categorias from '../components/Categorias'
 import Usuarios from '../components/Usuarios'
 import Home from '../components/Home'
-import AddUser from '../components/AdicionarUsuario'
 import Produto from '../components/Produto'
-import AddCategoria from '../components/AdicionarCategoria'
 import FormPedidos from '../components/FormPedidos'
 import Pedido from "../components/Pedido"
 import AdminRouter from "../components/AdminRouter"
@@ -103,17 +101,6 @@ export default new Router({
       name: 'Pedido',
       component: Pedido
     },
-    {
-      path: '/add-user',
-      name: 'AdicionarUsuario',
-      component: AddUser 
-    },
-   
-    {
-      path: '/add-categoria',
-      name: 'AdicionarCategoria',
-      component: AddCategoria 
-    }, 
     {
       path: '/add-pedido',
       name: 'FormPedidos',

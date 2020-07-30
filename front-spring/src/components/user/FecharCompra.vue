@@ -23,11 +23,11 @@
     </div>
     <b-form>
       <b-form-group label="Endereço de entrega">
-        <b-form-select v-model="selectedEndereco" :options="tableDataEndereco"></b-form-select>
+        <b-form-select id="adress" v-model="selectedEndereco" :options="tableDataEndereco"></b-form-select>
       </b-form-group>
     </b-form >
     <div class="btn-fechar-pedido">
-      <b-button variant="primary" @click="handleSave()">Fechar pedido</b-button>
+      <b-button id="fechar-pedido" variant="primary" @click="handleSave()">Fechar pedido</b-button>
     </div>
   </div>
   </b-overlay>
