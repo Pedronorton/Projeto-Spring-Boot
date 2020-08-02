@@ -40,9 +40,8 @@ public class CategoriaResource {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity listarTodos(){
+    public ResponseEntity<?> listarTodos(){
         List<Categoria> obj = service.findAll();
-
         return ResponseEntity.ok().body(obj);
     }
 
