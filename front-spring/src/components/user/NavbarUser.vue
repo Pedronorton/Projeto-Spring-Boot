@@ -2,7 +2,7 @@
   <nav class="navbar">
     <div class="nav-left">
       <router-link to="/">
-        <b-img :src="require(`@/assets/logo_size.jpg`)" class="logo-image"></b-img>
+        <b-img :src="require(`@/assets/logo_size.jpg`)" class="logo-image" id="logo"></b-img>
       </router-link>
     </div>
 
@@ -50,6 +50,9 @@ export default {
   data() {
     return {
       presentUserFlag:false,
+      easterEgg: 0,
+      easterSeconds:null,
+      easterMinutes: null,
       items: [
         {
           id: "0",
@@ -84,16 +87,34 @@ export default {
     }
     this.items[2].label = Object.keys(this.$store.state.tableProductsOnCart).length
   },
+  mounted(){
+    const logo = document.getElementById('logo')
+    
+    logo.addEventListener('click', this.easter)
+  },
   methods:{
     ...mapActions([
       'showModalCart',
     ]),
+    easter(){
+        if(window.location == "http://localhost:8080/"){
+          this.easterEgg+=1
+          if(this.easterEgg == 17){
+            alert("Parabéns ! Você clicou 17 vezes !!")
+          }
+        }else{
+          this.easterEgg = 0
+        }
+      
+    },
     logout(){
       localStorage.removeItem('token');
       this.items[0].nameUser = "cliente"
       this.presentUserFlag = false
-    }
-  }
+    },
+  },
+  
+  
 };
 </script>
 

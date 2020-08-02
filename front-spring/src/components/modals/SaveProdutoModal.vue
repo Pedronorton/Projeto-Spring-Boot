@@ -18,7 +18,7 @@
               <b-form-tag @remove="removeTag(tag)" variant="info">{{ tag.text }}</b-form-tag>
             </li>
           </ul>
-          <b-form-select id="tags" v-model="selectedOptionTags" :options="options">
+          <b-form-select name="tags" id="tags" v-model="selectedOptionTags" :options="options">
             <template v-slot:first>
               <!-- This is required to prevent bugs with Safari -->
               <option disabled value>Escolha as categorias relacionadas</option>

@@ -64,7 +64,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.5);
   position: absolute;
   top: 0px;
-  z-index: 1;
+  z-index: 2;
   left: 0px;
   display: flex;
   justify-content: flex-end;

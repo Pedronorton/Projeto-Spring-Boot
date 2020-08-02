@@ -114,8 +114,7 @@ export default {
   animation: swing .2s ease-out !important;
   -webkit-animation: swing .2s ease-out !important;
 }
-.item-nav:hover {
-}
+
 .menu {
   background-color: #f8f9fa;
   display: flex;
